@@ -1,13 +1,13 @@
 GET http://localhost:8080/hello
 #Accept: application/json
 
-> {%
- client.test("test-hello", function(){
-    client.log("test /hello API");
-    client.log(response.body);
-    client.log(JSON.stringify(response.body));
-    client.assert(response.status == 200, "status is not 200");
-    client.assert(response.body === "Hello World", "failed");
- });
- %}
+#> {%
+# client.test("test-hello", function(){
+#    client.log("test /hello API");
+#    client.log(response.body);
+#    client.log(JSON.stringify(response.body));
+#    client.assert(response.status == 200, "status is not 200");
+#    client.assert(response.body === "Hello World", "failed");
+# });
+# %}
 ###

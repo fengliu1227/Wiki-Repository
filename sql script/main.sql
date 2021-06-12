@@ -1,5 +1,5 @@
-drop table if exists `abc`;
-create table `abc`
+drop table if exists `t_user`;
+create table `t_user`
 (
     `id`   bigint not null comment 'id',
     `name` varchar(50) comment 'name',
