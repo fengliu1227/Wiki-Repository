@@ -4,6 +4,7 @@ import com.andrew.wiki.domain.EBook;
 import com.andrew.wiki.domain.EBookExample;
 import com.andrew.wiki.mapper.EBookMapper;
 import com.andrew.wiki.response.EBookResponse;
+import com.andrew.wiki.util.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,10 @@ public class EBookService {
     @Autowired
     private EBookMapper eBookMapper;
 
-    public List<EBook> getAll(){
-        return eBookMapper.selectByExample(new EBookExample());
+    public List<EBookResponse> getAll(){
+        List<EBook> list = eBookMapper.selectByExample(new EBookExample());
+        List<EBookResponse> resList = CopyUtil.copyList(list, EBookResponse.class);
+        return resList;
     }
 
     public List<EBookResponse> searchByKeyword(String keyword){
@@ -26,12 +29,8 @@ public class EBookService {
         EBookExample.Criteria criteria = eBookExample.createCriteria();
         criteria.andNameLike("%" + keyword + "%");
         List<EBook> list = eBookMapper.selectByExample(eBookExample);
-        List<EBookResponse> resList = new ArrayList<>();
-        for(EBook ebook: list){
-            EBookResponse eBookResponse = new EBookResponse();
-            BeanUtils.copyProperties(ebook,eBookResponse);
-            resList.add(eBookResponse);
-        }
+
+        List<EBookResponse> resList = CopyUtil.copyList(list, EBookResponse.class);
         return resList;
     }
 }
