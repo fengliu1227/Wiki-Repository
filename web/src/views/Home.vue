@@ -1,6 +1,6 @@
 <template>
   <a-layout>
-    <a-layout-sider width="200" style="background: #fff">
+    <a-layout-sider width="200" style="background: #ffffff">
       <a-menu
               mode="inline"
               v-model:selectedKeys="selectedKeys2"
@@ -48,13 +48,16 @@
     <a-layout-content
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      Content
+      <pre>
+      {{ebooks}}
+      </pre>
+      {{books}}
     </a-layout-content>
   </a-layout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
@@ -63,9 +66,18 @@ export default defineComponent({
   },
   setup(){
     console.log("setup");
-    axios.get("http://localhost:8080/search").then((response)=>{
-      console.log(response);
+    const ebooks = ref();
+
+    onMounted(() =>{
+      console.log("onMounted");
+      axios.get("http://localhost:8080/search").then((response)=>{
+        const data = response.data;
+        ebooks.value = data.content;
+      })
     })
+    return{
+      ebooks
+    }
   }
 });
 </script>
