@@ -34,9 +34,9 @@ public class HelloController {
     }
 
     @GetMapping("/search")
-    public CommonResponse search(@RequestParam(value="keyword", defaultValue="")String keyWord){
+    public CommonResponse search(EBookResponse req){
         CommonResponse<List> commonResponse = new CommonResponse<>();
-        List<EBookResponse> list = eBookService.searchByKeyword(keyWord);
+        List<EBookResponse> list = eBookService.searchByKeyword(req);
         commonResponse.setContent(list);
         return commonResponse;
     }
