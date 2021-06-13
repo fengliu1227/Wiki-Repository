@@ -8,6 +8,7 @@ import com.andrew.wiki.service.EBookService;
 import com.andrew.wiki.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class HelloController {
         return userservice.getAll();
     }
 
-    @GetMapping("/book")
-    public CommonResponse list(){
+    @GetMapping("/books")
+    public CommonResponse getAll(){
         CommonResponse<List> commonResponse = new CommonResponse<>();
         List<EBookResponse> list = eBookService.getAll();
         commonResponse.setContent(list);
@@ -33,9 +34,9 @@ public class HelloController {
     }
 
     @GetMapping("/search")
-    public CommonResponse search(){
+    public CommonResponse search(@RequestParam(value="keyword", defaultValue="")String keyWord){
         CommonResponse<List> commonResponse = new CommonResponse<>();
-        List<EBookResponse> list = eBookService.searchByKeyword("入门");
+        List<EBookResponse> list = eBookService.searchByKeyword(keyWord);
         commonResponse.setContent(list);
         return commonResponse;
     }
