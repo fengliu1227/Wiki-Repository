@@ -55,10 +55,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import axios from 'axios';
 
 export default defineComponent({
   name: 'Home',
   components: {
   },
+  setup(){
+    console.log("setup");
+    axios.get("http://localhost:8080/search").then((response)=>{
+      console.log(response);
+    })
+  }
 });
 </script>
