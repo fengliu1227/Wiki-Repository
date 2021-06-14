@@ -1,0 +1,10 @@
+POST http://localhost:8080/category
+Content-type:application/json
+
+{
+  "name": "asdasd",
+  "parent": 100,
+  "sort": 500
+}
+###
+GET http://localhost:8080/category/list?page=1&size=50

@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class HelloController {
+public class EBookController {
 
     @Autowired
     private UserService userservice;
