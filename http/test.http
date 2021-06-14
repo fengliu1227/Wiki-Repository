@@ -11,7 +11,7 @@ GET http://localhost:8080/hello
 # });
 # %}
 ###
-GET http://localhost:8080/ebook/list?page=1&size=10
+GET http://localhost:8080/ebook/list?size=1000
 
 ###
 PUT http://localhost:8080/ebook/1

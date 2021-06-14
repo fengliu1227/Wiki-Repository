@@ -9,6 +9,7 @@ import com.andrew.wiki.response.CommonResponse;
 import com.andrew.wiki.response.EBookQueryResponse;
 import com.andrew.wiki.response.PageResponse;
 import com.andrew.wiki.util.CopyUtil;
+import com.andrew.wiki.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class EBookService {
 
     @Autowired
     private EBookMapper eBookMapper;
+
+    @Autowired
+    private SnowFlake snowFlake;
 
     public PageResponse<EBookQueryResponse> getList(EBookQueryRequest req){
         EBookExample eBookExample = new EBookExample();
@@ -50,6 +54,16 @@ public class EBookService {
     public void update(EBookSaveRequest req){
         EBook ebook = CopyUtil.copy(req, EBook.class);
         eBookMapper.updateByPrimaryKey(ebook);
+    }
+
+    public void save(EBookSaveRequest req){
+        EBook ebook = CopyUtil.copy(req, EBook.class);
+        ebook.setId(snowFlake.nextId());
+        eBookMapper.insert(ebook);
+    }
+
+    public void delete(Long id){
+        eBookMapper.deleteByPrimaryKey(id);
     }
 
 }

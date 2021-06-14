@@ -11,6 +11,7 @@ import com.andrew.wiki.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,18 +27,31 @@ public class HelloController {
     }
 
     @GetMapping("/ebook/list")
-    public CommonResponse getList(EBookQueryRequest req){
+    public CommonResponse getList(@Valid EBookQueryRequest req){
         CommonResponse<PageResponse> commonResponse = new CommonResponse<>();
         PageResponse<EBookQueryResponse> list = eBookService.getList(req);
         commonResponse.setContent(list);
         return commonResponse;
     }
 
-    @PutMapping("/ebook/{id}")
-    public CommonResponse update(@PathVariable("id")Long id, @RequestBody EBookSaveRequest req){
-        req.setId(id);
+    @PutMapping("/ebook")
+    public CommonResponse update(@RequestBody EBookSaveRequest req){
         CommonResponse commonResponse = new CommonResponse<>();
         eBookService.update(req);
+        return commonResponse;
+    }
+
+    @PostMapping("/ebook")
+    public CommonResponse save(@RequestBody EBookSaveRequest req){
+        CommonResponse commonResponse = new CommonResponse<>();
+        eBookService.save(req);
+        return commonResponse;
+    }
+
+    @DeleteMapping("/ebook/{id}")
+    public CommonResponse delete(@PathVariable("id") Long id){
+        CommonResponse commonResponse = new CommonResponse<>();
+        eBookService.delete(id);
         return commonResponse;
     }
 }

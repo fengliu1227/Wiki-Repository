@@ -3,6 +3,9 @@
     <a-layout-content
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
+      <a-button type="primary" @click="add()">
+        新增
+      </a-button>
       <a-table
               :columns="columns"
               :row-key="record => record.id"
@@ -20,9 +23,16 @@
             <a-button type="primary" @click="edit(record)">
               Edit
             </a-button>
-            <a-button type="danger">
-              Delete
-            </a-button>
+            <a-popconfirm
+                    title="删除后不可恢复，确认删除?"
+                    ok-text="Yes"
+                    cancel-text="No"
+                    @confirm="handleDelete(record.id)"
+            >
+              <a-button type="danger">
+                Delete
+              </a-button>
+            </a-popconfirm>
           </a-space>
         </template>
       </a-table>
@@ -59,6 +69,7 @@
 <script lang="ts">
   import { defineComponent, onMounted, ref } from 'vue';
   import axios from 'axios';
+  import { message } from 'ant-design-vue';
 
 
   export default defineComponent({
@@ -67,7 +78,7 @@
       const ebooks = ref();
       const pagination = ref({
         current: 1,
-        pageSize: 1,
+        pageSize: 5,
         total: 0
       });
       const loading = ref(false);
@@ -116,10 +127,15 @@
         }).then((response) => {
           loading.value = false;
           const data = response.data;
-          ebooks.value = data.content.list;
+          if(data.success){
+            ebooks.value = data.content.list;
             // 重置分页按钮
             pagination.value.current = params.page;
             pagination.value.total = data.content.total;
+          }else{
+            message.error(data.message);
+          }
+
         });
       };
 
@@ -145,24 +161,41 @@
       const handleModalOk = () => {
         modalLoading.value = true;
 
+
+        if(!ebook.value.id){
+          axios.post("/ebook", ebook.value).then((response) =>{
+            modalLoading.value = false;
+            const data = response.data;
+            if (data.success) {
+              modalVisible.value = false;
+
+              // 重新加载列表
+              handleQuery({
+                page: pagination.value.current,
+                size: pagination.value.pageSize,
+              });
+            }
+          })
+        }else{
+          axios.put("/ebook", ebook.value).then((response) => {
+            modalLoading.value = false;
+            const data = response.data;
+            if (data.success) {
+              modalVisible.value = false;
+
+              // 重新加载列表
+              handleQuery({
+                page: pagination.value.current,
+                size: pagination.value.pageSize,
+              });
+            } else {
+              message.error(data.message);
+            }
+          });
+        }
         // ebook.value.category1Id = categoryIds.value[0];
         // ebook.value.category2Id = categoryIds.value[1];
-        axios.put("/ebook/" + ebook.value.id, ebook.value).then((response) => {
-          const data = response.data; // data = commonResp
-          if (data.success) {
-            modalLoading.value = false;
-            modalVisible.value = false;
 
-            // 重新加载列表
-            handleQuery({
-              page: pagination.value.current,
-              size: pagination.value.pageSize,
-            });
-          }
-          // } else {
-          //   message.error(data.message);
-          // }
-        });
       };
 
 
@@ -175,6 +208,30 @@
         // ebook.value = Tool.copy(record);
         // categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
       };
+
+      /**
+       * 新增
+       */
+      const add = () => {
+        modalVisible.value = true;
+        ebook.value = {};
+      };
+
+      const handleDelete = (id: number) => {
+        axios.delete("/ebook/" + id).then((response) => {
+          const data = response.data; // data = commonResp
+          if (data.success) {
+            // 重新加载列表
+            handleQuery({
+              page: pagination.value.current,
+              size: pagination.value.pageSize,
+            });
+          } else {
+            message.error(data.message);
+          }
+        });
+      };
+
 
       onMounted(() => {
         handleQuery({
@@ -190,10 +247,12 @@
         loading,
         handleTableChange,
         edit,
+        add,
         ebook,
         modalVisible,
         modalLoading,
         handleModalOk,
+        handleDelete,
       }
     }
   });
