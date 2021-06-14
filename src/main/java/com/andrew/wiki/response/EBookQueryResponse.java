@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EBookResponse{
+public class EBookQueryResponse {
+    private Long id;
 
     private String name;
 

@@ -11,5 +11,14 @@ GET http://localhost:8080/hello
 # });
 # %}
 ###
-GET http://localhost:8080/ebook/list?page=2&size=1&name=入门
+GET http://localhost:8080/ebook/list?page=1&size=10
+
+###
+PUT http://localhost:8080/ebook/1
+Content-type:application/json
+
+{
+  "id": 1,
+  "name": ""
+}
 

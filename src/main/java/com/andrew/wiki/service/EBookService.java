@@ -3,8 +3,10 @@ package com.andrew.wiki.service;
 import com.andrew.wiki.domain.EBook;
 import com.andrew.wiki.domain.EBookExample;
 import com.andrew.wiki.mapper.EBookMapper;
-import com.andrew.wiki.request.EBookRequest;
-import com.andrew.wiki.response.EBookResponse;
+import com.andrew.wiki.request.EBookQueryRequest;
+import com.andrew.wiki.request.EBookSaveRequest;
+import com.andrew.wiki.response.CommonResponse;
+import com.andrew.wiki.response.EBookQueryResponse;
 import com.andrew.wiki.response.PageResponse;
 import com.andrew.wiki.util.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -24,7 +26,7 @@ public class EBookService {
     @Autowired
     private EBookMapper eBookMapper;
 
-    public PageResponse<EBookResponse> getList(EBookRequest req){
+    public PageResponse<EBookQueryResponse> getList(EBookQueryRequest req){
         EBookExample eBookExample = new EBookExample();
         EBookExample.Criteria criteria = eBookExample.createCriteria();
         if(!ObjectUtils.isEmpty(req.getName())){
@@ -38,11 +40,16 @@ public class EBookService {
         LOG.info("总行数：{}", pageInfo.getTotal());
         LOG.info("总页数：{}", pageInfo.getPages());
 
-        List<EBookResponse> resList = CopyUtil.copyList(list, EBookResponse.class);
-        PageResponse<EBookResponse> pageResponse = new PageResponse<>();
+        List<EBookQueryResponse> resList = CopyUtil.copyList(list, EBookQueryResponse.class);
+        PageResponse<EBookQueryResponse> pageResponse = new PageResponse<>();
         pageResponse.setTotal(pageInfo.getTotal());
         pageResponse.setList(resList);
         return pageResponse;
+    }
+
+    public void update(EBookSaveRequest req){
+        EBook ebook = CopyUtil.copy(req, EBook.class);
+        eBookMapper.updateByPrimaryKey(ebook);
     }
 
 }
