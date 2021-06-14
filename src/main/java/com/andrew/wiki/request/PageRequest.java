@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class PageRequest {
     @NotNull(message = "[page] can not be empty")
-    private int page;
+    private Integer page;
 
     @NotNull(message="[size] can not be empty")
     @Max(value = 500, message = "[size](the maximum of the items per page) is 500")
-    private int size;
+    private Integer size;
 
 }
