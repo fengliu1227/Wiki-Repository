@@ -42,7 +42,7 @@
       const ebooks = ref();
       const pagination = ref({
         current: 1,
-        pageSize: 10,
+        pageSize: 1,
         total: 0
       });
       const loading = ref(false);
@@ -83,12 +83,18 @@
       const handleQuery = (params: any) => {
         loading.value = true;
         ebooks.value = [];
-        axios.get("/books", params).then((response) => {
+        axios.get("/ebook/list", {
+          params:{
+            page: params.page,
+            size: params.size
+          }
+        }).then((response) => {
           loading.value = false;
           const data = response.data;
-          ebooks.value = data.content;
+          ebooks.value = data.content.list;
             // 重置分页按钮
             pagination.value.current = params.page;
+            pagination.value.total = data.content.total;
         });
       };
 
@@ -96,7 +102,7 @@
        * 表格点击页码时触发
        */
       const handleTableChange = (pagination: any) => {
-        console.log("看看自带的分页参数都有啥：" + pagination);
+        console.log("看看自带的分页参数都有啥：" , pagination);
         handleQuery({
           page: pagination.current,
           size: pagination.pageSize
@@ -105,7 +111,10 @@
 
 
       onMounted(() => {
-        handleQuery({});
+        handleQuery({
+          page:1,
+          size:pagination.value.pageSize
+        });
       });
 
       return {
