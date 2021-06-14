@@ -40,7 +40,7 @@
                              targetPackage="com.andrew.wiki.mapper"
                              type="XMLMAPPER"/>
 
-        <table tableName="t_ebook" domainObjectName="EBook"/>
+        <table tableName="t_category" domainObjectName="Category"/>
 <!--        <table tableName="t_user" domainObjectName="User"/>-->
     </context>
 </generatorConfiguration>
