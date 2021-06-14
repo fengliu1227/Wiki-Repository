@@ -95,12 +95,10 @@ export default defineComponent({
   components: {
   },
   setup(){
-    console.log("setup");
     const ebooks = ref();
 
     onMounted(() =>{
-      console.log("onMounted");
-      axios.get("http://localhost:8080/books").then((response)=>{
+      axios.get("/books").then((response)=>{
         const data = response.data;
         ebooks.value = data.content;
       })
