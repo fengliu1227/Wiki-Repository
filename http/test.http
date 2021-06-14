@@ -11,10 +11,5 @@ GET http://localhost:8080/hello
 # });
 # %}
 ###
-GET http://localhost:8080/books
+GET http://localhost:8080/ebook/list?page=2&size=1&name=入门
 
-###
-GET http://localhost:8080/search?name=vue
-
-###
-GET http://localhost:8080/search

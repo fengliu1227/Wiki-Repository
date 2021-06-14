@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class EBookRequest extends PageRequest{
-    private Long id;
+@AllArgsConstructor
+public class PageRequest {
+    private int page;
 
-    private String name;
-
-    private String description;
+    private int size;
 
 }
