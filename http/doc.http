@@ -1,1 +1,21 @@
 GET http://localhost:8080/doc
+###
+POST http://localhost:8080/doc
+Content-type:application/json
+
+
+{
+  "ebookId": 2,
+  "name": "asdasd",
+  "parent": 100,
+  "sort": 500
+}
+###
+PUT http://localhost:8080/doc
+Content-type:application/json
+{
+  "ebookId": 2,
+  "name": "asdasd",
+  "parent": 100,
+  "sort": 500
+}

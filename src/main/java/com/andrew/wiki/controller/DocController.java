@@ -46,6 +46,7 @@ public class DocController {
 
     @PostMapping("/doc")
     public CommonResponse save(@RequestBody DocSaveRequest req){
+        System.out.println("=====================================" + req);
         CommonResponse commonResponse = new CommonResponse<>();
         docService.save(req);
         return commonResponse;
