@@ -76,21 +76,12 @@
       </a-tree-select>
     </a-form-item>
 
-    <a-form-item label="父分类">
-      <a-select
-              v-model:value="doc.parent"
-              ref="select"
-      >
-        <a-select-option :value="0">
-          None
-        </a-select-option>
-        <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="doc.id === c.id">
-          {{c.name}}
-        </a-select-option>
-      </a-select>
-    </a-form-item>
     <a-form-item label="顺序">
       <a-input v-model:value="doc.sort" />
+    </a-form-item>
+
+    <a-form-item label="内容">
+      <div id="content"></div>
     </a-form-item>
   </a-form>
   </a-modal>
@@ -104,6 +95,7 @@
   import { Tool } from '@/util/tool';
   import {useRoute} from "vue-router";
   import ExclamationCircleOutlined from "@ant-design/icons-vue/ExclamationCircleOutlined";
+  import E from 'wangeditor';
 
 
   export default defineComponent({
@@ -198,6 +190,7 @@
       const doc = ref();
       const modalVisible = ref(false);
       const modalLoading = ref(false);
+      const editor = new E('#content');
       const handleModalOk = () => {
         modalLoading.value = true;
 
@@ -313,6 +306,9 @@
 
         // 为选择树添加一个"无"
         treeSelectData.value.unshift({id: 0, name: 'None'});
+        setTimeout(() =>{
+          editor.create();
+        },100);
       };
 
       /**
@@ -328,6 +324,9 @@
 
         // 为选择树添加一个"无"
         treeSelectData.value.unshift({id: 0, name: '无'});
+        setTimeout(() =>{
+          editor.create();
+        },100);
       };
 
       // const handleDelete = (id: number) => {
