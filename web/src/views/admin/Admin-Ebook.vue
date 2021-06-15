@@ -33,6 +33,9 @@
           <img v-if="cover" :src="cover" alt="avatar" />
         </template>
 
+        <template v-slot:category="{ text, record }">
+          <span>{{ getCategoryName(record.category1Id) }} / {{ getCategoryName(record.category2Id) }}</span>
+        </template>
         <template v-slot:action="{ text, record }">
           <a-space size="small">
             <a-button type="primary" @click="edit(record)">
@@ -111,7 +114,10 @@
           title: '名称',
           dataIndex: 'name'
         },
-
+        {
+          title: '分类',
+          slots: { customRender: 'category' }
+        },
         {
           title: '文档数',
           dataIndex: 'docCount'
@@ -173,14 +179,14 @@
       /**
        * 数组，[100, 101]对应：前端开发 / Vue
        */
-      // const categoryIds = ref();
+      const categoryIds = ref();
       const ebook = ref();
       const modalVisible = ref(false);
       const modalLoading = ref(false);
       const handleModalOk = () => {
         modalLoading.value = true;
-
-
+        ebook.value.category1Id = categoryIds.value[0];
+        ebook.value.category2Id = categoryIds.value[1];
         if(!ebook.value.id){
           axios.post("/ebook", ebook.value).then((response) =>{
             modalLoading.value = false;
@@ -212,9 +218,6 @@
             }
           });
         }
-        // ebook.value.category1Id = categoryIds.value[0];
-        // ebook.value.category2Id = categoryIds.value[1];
-
       };
 
 
@@ -224,7 +227,7 @@
       const edit = (record: any) => {
         modalVisible.value = true;
         ebook.value = Tool.copy(record);
-        // categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
+        categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
       };
 
       /**
@@ -250,8 +253,49 @@
         });
       };
 
+      const level1 =  ref();
+      let categorys: any;
+      /**
+       * 查询所有分类
+       **/
+      const handleQueryCategory = () => {
+        loading.value = true;
+        axios.get("/category").then((response) => {
+          loading.value = false;
+          const data = response.data;
+          if (data.success) {
+            categorys = data.content;
+            console.log("原始数组：", categorys);
+
+            level1.value = [];
+            level1.value = Tool.array2Tree(categorys, 0);
+            console.log("树形结构：", level1.value);
+
+            // 加载完分类后，再加载电子书，否则如果分类树加载很慢，则电子书渲染会报错
+            handleQuery({
+              page: 1,
+              size: pagination.value.pageSize,
+            });
+          } else {
+            message.error(data.message);
+          }
+        });
+      };
+
+      const getCategoryName = (cid: number) => {
+        // console.log(cid)
+        let result = "";
+        categorys.forEach((item: any) => {
+          if (item.id === cid) {
+            // return item.name; // 注意，这里直接return不起作用
+            result = item.name;
+          }
+        });
+        return result;
+      };
 
       onMounted(() => {
+        handleQueryCategory(),
         handleQuery({
           page:1,
           size:pagination.value.pageSize
@@ -273,6 +317,9 @@
         handleModalOk,
         handleDelete,
         handleQuery,
+        categoryIds,
+        level1,
+        getCategoryName,
       }
     }
   });
