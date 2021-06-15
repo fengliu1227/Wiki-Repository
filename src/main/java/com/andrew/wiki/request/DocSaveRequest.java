@@ -28,4 +28,7 @@ public class DocSaveRequest {
     private Integer viewCount;
 
     private Integer voteCount;
+
+    @NotBlank(message ="[content] can not be empty")
+    private String content;
 }

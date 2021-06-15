@@ -283,7 +283,7 @@
       editor.config.zIndex = 0;
       const handleSave = () => {
         modalLoading.value = true;
-
+        doc.value.content = editor.txt.html();
 
         if(!doc.value.id){
           axios.post("/doc", doc.value).then((response) =>{
@@ -432,12 +432,12 @@
         deleteNames.length = 0;
         getDeleteIds(level1.value, id);
         Modal.confirm({
-          title: 'Important Notice',
+          title: '重要提醒',
           icon: createVNode(ExclamationCircleOutlined),
-          content: 'You will delete：【' + deleteNames.join("，") + "】. This process can not revert, Are you sure to delete them？",
+          content: '将删除：【' + deleteNames.join("，") + "】删除后不可恢复，确认删除？",
           onOk() {
             // console.log(ids)
-            axios.delete("/doc/delete/" + deleteIds.join(",")).then((response) => {
+            axios.delete("/doc/" + deleteIds.join(",")).then((response) => {
               const data = response.data; // data = commonResp
               if (data.success) {
                 // 重新加载列表
