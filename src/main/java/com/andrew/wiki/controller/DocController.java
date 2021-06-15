@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -25,6 +26,14 @@ public class DocController {
     public CommonResponse getAll(){
         CommonResponse<List> commonResponse = new CommonResponse<>();
         List<DocQueryResponse> list = docService.getAll();
+        commonResponse.setContent(list);
+        return commonResponse;
+    }
+
+    @GetMapping("/doc/all/{id}")
+    public CommonResponse getByEbookId(@PathVariable("id")Long id){
+        CommonResponse<List> commonResponse = new CommonResponse<>();
+        List<DocQueryResponse> list = docService.getByEbookId(id);
         commonResponse.setContent(list);
         return commonResponse;
     }
@@ -52,10 +61,11 @@ public class DocController {
         return commonResponse;
     }
 
-    @DeleteMapping("/doc/{id}")
-    public CommonResponse delete(@PathVariable("id") Long id){
+    @DeleteMapping("/doc/{idsStr}")
+    public CommonResponse delete(@PathVariable("idsStr") String idsStr){
         CommonResponse commonResponse = new CommonResponse<>();
-        docService.delete(id);
+        List<String> list = Arrays.asList(idsStr.split(","));
+        docService.delete(list);
         return commonResponse;
     }
 }

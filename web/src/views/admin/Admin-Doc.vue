@@ -98,11 +98,12 @@
 
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+  import { defineComponent, onMounted, ref , createVNode} from 'vue';
   import axios from 'axios';
-  import { message } from 'ant-design-vue';
+  import {message, Modal} from 'ant-design-vue';
   import { Tool } from '@/util/tool';
   import {useRoute} from "vue-router";
+  import ExclamationCircleOutlined from "@ant-design/icons-vue/ExclamationCircleOutlined";
 
 
   export default defineComponent({
@@ -149,7 +150,7 @@
       const handleQuery = () => {
         loading.value = true;
         level1.value = [];
-        axios.get("/doc").then((response) => {
+        axios.get("/doc/all/" + route.query.ebookId).then((response) => {
           loading.value = false;
           const data = response.data;
           if(data.success){
@@ -162,6 +163,30 @@
 
         });
       };
+      // const handleQuery = () => {
+      //           loading.value = true;
+      //           // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
+      //           level1.value = [];
+      //           axios.get("/doc/all/" + route.query.ebookId).then((response) => {
+      //             loading.value = false;
+      //             const data = response.data;
+      //             if (data.success) {
+      //               docs.value = data.content;
+      //               console.log("原始数组：", docs.value);
+      //
+      //               level1.value = [];
+      //               level1.value = Tool.array2Tree(docs.value, 0);
+      //               console.log("树形结构：", level1);
+      //
+      //               // 父文档下拉框初始化，相当于点击新增
+      //               treeSelectData.value = Tool.copy(level1.value) || [];
+      //               // 为选择树添加一个"无"
+      //               treeSelectData.value.unshift({id: 0, name: '无'});
+      //             } else {
+      //               message.error(data.message);
+      //             }
+      //           });
+      //         };
 
 
       // -------- 表单 ---------
@@ -237,6 +262,43 @@
       };
 
 
+
+      const deleteIds: Array<string> = [];
+      const deleteNames: Array<string> = [];
+      /**
+       * 查找整根树枝
+       */
+      const getDeleteIds = (treeSelectData: any, id: any) => {
+        // console.log(treeSelectData, id);
+        // 遍历数组，即遍历某一层节点
+        for (let i = 0; i < treeSelectData.length; i++) {
+          const node = treeSelectData[i];
+          if (node.id === id) {
+            // 如果当前节点就是目标节点
+            console.log("delete", node);
+            // 将目标ID放入结果集ids
+            // node.disabled = true;
+            deleteIds.push(id);
+            deleteNames.push(node.name);
+
+            // 遍历所有子节点
+            const children = node.children;
+            if (Tool.isNotEmpty(children)) {
+              for (let j = 0; j < children.length; j++) {
+                getDeleteIds(children, children[j].id)
+              }
+            }
+          } else {
+            // 如果当前节点不是目标节点，则到其子节点再找找看。
+            const children = node.children;
+            if (Tool.isNotEmpty(children)) {
+              getDeleteIds(children, id);
+            }
+          }
+        }
+      };
+
+
       /**
        * 编辑
        */
@@ -268,15 +330,40 @@
         treeSelectData.value.unshift({id: 0, name: '无'});
       };
 
+      // const handleDelete = (id: number) => {
+      //   getDeleteIds(level1.value, id);
+      //   axios.delete("/doc/" + deleteIds.join(",")).then((response) => {
+      //     const data = response.data;
+      //     if (data.success) {
+      //       // 重新加载列表
+      //       handleQuery();
+      //     } else {
+      //       message.error(data.message);
+      //     }
+      //   });
+      // };
       const handleDelete = (id: number) => {
-        axios.delete("/doc/" + id).then((response) => {
-          const data = response.data;
-          if (data.success) {
-            // 重新加载列表
-            handleQuery();
-          } else {
-            message.error(data.message);
-          }
+        // console.log(level1, level1.value, id)
+        // 清空数组，否则多次删除时，数组会一直增加
+        deleteIds.length = 0;
+        deleteNames.length = 0;
+        getDeleteIds(level1.value, id);
+        Modal.confirm({
+          title: 'Important Notice',
+          icon: createVNode(ExclamationCircleOutlined),
+          content: 'You will delete：【' + deleteNames.join("，") + "】. This process can not revert, Are you sure to delete them？",
+          onOk() {
+            // console.log(ids)
+            axios.delete("/doc/delete/" + deleteIds.join(",")).then((response) => {
+              const data = response.data; // data = commonResp
+              if (data.success) {
+                // 重新加载列表
+                handleQuery();
+              } else {
+                message.error(data.message);
+              }
+            });
+          },
         });
       };
 

@@ -31,7 +31,7 @@ public class DocService {
 
     public List<DocQueryResponse> getAll(){
         DocExample docExample = new DocExample();
-//        DocExample.Criteria criteria = DocExample.createCriteria();
+//        DocExample.Criteria criteria = docExample.createCriteria();
         docExample.setOrderByClause("sort asc");
         List<Doc> list = docMapper.selectByExample(docExample);
 
@@ -58,6 +58,17 @@ public class DocService {
         return pageResponse;
     }
 
+    public List<DocQueryResponse> getByEbookId(Long id){
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+        criteria.andEbookIdEqualTo(id);
+        List<Doc> list = docMapper.selectByExample(docExample);
+
+
+        List<DocQueryResponse> resList = CopyUtil.copyList(list, DocQueryResponse.class);
+        return resList;
+    }
+
     public void update(DocSaveRequest req){
         Doc doc = CopyUtil.copy(req, Doc.class);
         docMapper.updateByPrimaryKey(doc);
@@ -72,6 +83,13 @@ public class DocService {
 
     public void delete(Long id){
         docMapper.deleteByPrimaryKey(id);
+    }
+
+    public void delete(List<String> ids){
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+        criteria.andIdIn(ids);
+        docMapper.deleteByExample(docExample);
     }
 
 }
