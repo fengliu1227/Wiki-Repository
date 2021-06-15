@@ -15,6 +15,8 @@ public class EBookQueryRequest extends PageRequest{
 //    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
+    private Long category2Id;
+
     private String name;
 
     private String description;

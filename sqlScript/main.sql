@@ -5,7 +5,7 @@ create table `t_user`
     `name` varchar(50) comment 'name',
     `password` varchar(50) comment 'password',
     primary key (`id`)
-)
+)engine=innodb default charset=utf8mb4;
 
 drop table if exists `t_ebook`;
 create table `t_ebook`
@@ -24,6 +24,9 @@ create table `t_ebook`
 
 insert into `t_ebook` (id, name, description) values(1, 'spring boot入门教程', '零基础入门java开发，企业级应用开发最佳框架');
 insert into `t_ebook` (id, name, description) values(2, 'Vue入门教程', '零基础入门前端开发，企业级应用开发最佳框架');
+insert into `t_ebook` (id, name, description) values (3, 'Python 入门教程', '零基础入门 Python 开发，企业级应用开发最佳首选框架');
+insert into `t_ebook` (id, name, description) values (4, 'Mysql 入门教程', '零基础入门 Mysql 开发，企业级应用开发最佳首选框架');
+insert into `t_ebook` (id, name, description) values (5, 'Oracle 入门教程', '零基础入门 Oracle 开发，企业级应用开发最佳首选框架');
 
 # 分类
 drop table if exists `t_category`;
@@ -49,3 +52,23 @@ insert into `t_category` (id, parent, name, sort) values (401, 400, 'MySQL', 401
 insert into `t_category` (id, parent, name, sort) values (500, 000, '其它', 500);
 insert into `t_category` (id, parent, name, sort) values (501, 500, '服务器', 501);
 insert into `t_category` (id, parent, name, sort) values (502, 500, '开发工具', 502);
+
+-- 文档
+drop table if exists `t_doc`;
+create table `t_doc` (
+                           `id` bigint not null comment '文档id',
+                           `ebook_id` bigint not null default 0 comment '电子书id',
+                           `parent` bigint not null default 0 comment '父id',
+                           `name` varchar(50) not null comment '名称',
+                           `sort` int comment '顺序',
+                           `view_count` int default 0 comment '阅读数',
+                           `vote_count` int default 0 comment '点赞数',
+                           primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='文档';
+
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values(1, 1, 0, '文档1', 1, 0 ,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values(2, 1, 1, '文档1.1', 1, 0 ,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values(3, 1, 0, '文档2', 2, 0 ,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values(4, 1, 3, '文档2.1', 1, 0 ,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values(5, 1, 3, '文档2.2', 2, 0 ,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values(6, 1, 5, '文档2.2.1', 1, 0 ,0);

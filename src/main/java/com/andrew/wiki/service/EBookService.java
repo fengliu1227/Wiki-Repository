@@ -36,6 +36,9 @@ public class EBookService {
         if(!ObjectUtils.isEmpty(req.getName())){
             criteria.andNameLike("%" + req.getName() + "%");
         }
+        if(!ObjectUtils.isEmpty(req.getCategory2Id())){
+            criteria.andCategory2IdEqualTo(req.getCategory2Id());
+        }
 
         PageHelper.startPage(req.getPage(), req.getSize());
         List<EBook> list = eBookMapper.selectByExample(eBookExample);

@@ -26,7 +26,10 @@
     <a-layout-content
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks">
+      <div class="welcome" v-show="isShowWelcome">
+        <h1>Weclome to Andrew's wiki repository</h1>
+      </div>
+      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks">
 
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
@@ -103,31 +106,36 @@ export default defineComponent({
       });
     };
 
-    const handleClick = () => {
-      console.log("menu click")
-      // if (value.key === 'welcome') {
-      //   isShowWelcome.value = true;
-      // } else {
-      //   categoryId2 = value.key;
-      //   isShowWelcome.value = false;
-      //   handleQueryEbook();
-      // }
-      // isShowWelcome.value = value.key === 'welcome';
-    };
-
-    onMounted(() =>{
-      handleQueryCategory();
+    const handleQueryEbook= () =>{
       axios.get("/ebook/list",{
         params:{
           page:1,
           size:500,
-
+          category2Id:category2Id
         }
       }).then((response)=>{
         const data = response.data;
         ebooks.value = data.content.list;
-      })
-    })
+      });
+    };
+
+    const isShowWelcome = ref(true);
+    let category2Id = 0;
+    const handleClick = (value: any) => {
+      console.log("menu click", value)
+      if (value.key === 'welcome') {
+        isShowWelcome.value = true;
+      } else {
+        category2Id = value.key;
+        isShowWelcome.value = false;
+        handleQueryEbook();
+      }
+    };
+
+    onMounted(() =>{
+      handleQueryCategory();
+      // handleQueryEbook();
+    });
     return{
       ebooks,
       actions: [
@@ -137,6 +145,7 @@ export default defineComponent({
       ],
       handleClick,
       level1,
+      isShowWelcome,
     }
   }
 });
