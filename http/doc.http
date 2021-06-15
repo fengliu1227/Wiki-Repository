@@ -22,3 +22,6 @@ Content-type:application/json
 
 ###
 DELETE http://localhost:8080/doc/60108827672055808
+
+###
+GET http://localhost:8080/doc/all/1
