@@ -128,10 +128,8 @@
           const data = response.data;
           if(data.success){
             categorys.value = data.content;
-            console.log("数组" + categorys.value);
             level1.value = [];
             level1.value = Tool.array2Tree(categorys.value, 0);
-            console.log("树形" + level1.value);
           }else{
             message.error(data.message);
           }
@@ -177,8 +175,6 @@
             }
           });
         }
-        // category.value.category1Id = categoryIds.value[0];
-        // category.value.category2Id = categoryIds.value[1];
 
       };
 
@@ -202,7 +198,7 @@
 
       const handleDelete = (id: number) => {
         axios.delete("/category/" + id).then((response) => {
-          const data = response.data; // data = commonResp
+          const data = response.data;
           if (data.success) {
             // 重新加载列表
             handleQuery();
