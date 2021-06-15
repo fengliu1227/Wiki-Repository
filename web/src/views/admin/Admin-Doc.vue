@@ -277,32 +277,24 @@
       doc.value = {
         ebookId: route.query.ebookId
       };
-      const modalVisible = ref(false);
-      const modalLoading = ref(false);
       const editor = new E('#content');
       editor.config.zIndex = 0;
       const handleSave = () => {
-        modalLoading.value = true;
         doc.value.content = editor.txt.html();
 
         if(!doc.value.id){
           axios.post("/doc", doc.value).then((response) =>{
-            modalLoading.value = false;
             const data = response.data;
             if (data.success) {
-              modalVisible.value = false;
-
+              message.success("update successfully");
               // 重新加载列表
               handleQuery();
             }
           })
         }else{
           axios.put("/doc", doc.value).then((response) => {
-            modalLoading.value = false;
             const data = response.data;
             if (data.success) {
-              modalVisible.value = false;
-
               // 重新加载列表
               handleQuery();
             } else {
@@ -402,7 +394,7 @@
        * 编辑
        */
       const edit = (record: any) => {
-        modalVisible.value = true;
+        editor.txt.html("");
         doc.value = Tool.copy(record);
         handleQueryContent();
 
@@ -418,7 +410,7 @@
        * 新增
        */
       const add = () => {
-        modalVisible.value = true;
+        editor.txt.html("");
         doc.value = {
           ebookId : route.query.ebookId
         };
@@ -480,8 +472,6 @@
         edit,
         add,
         doc,
-        modalVisible,
-        modalLoading,
         handleSave,
         handleDelete,
         handleQuery,
