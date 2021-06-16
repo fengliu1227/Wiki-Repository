@@ -1,5 +1,6 @@
 package com.andrew.wiki.controller;
 
+import com.andrew.wiki.mapper.DocCustMapper;
 import com.andrew.wiki.response.CommonResponse;
 import com.andrew.wiki.response.ContentResponse;
 import com.andrew.wiki.response.PageResponse;
@@ -14,6 +15,7 @@ public class ContentController {
 
     @Autowired
     ContentService contentService;
+
 
     @GetMapping("/content/{id}")
     public CommonResponse getById(@PathVariable("id") Long id){

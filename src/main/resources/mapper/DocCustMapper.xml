@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.andrew.wiki.mapper.DocCustMapper">
+    <update id="increaseViewCount">
+      update t_doc set view_count = view_count + 1 where id = #{id}
+    </update>
+    <update id="increaseVoteCount">
+      update t_doc set vote_count = vote_count + 1 where id = #{id}
+    </update>
+
+    <update id="updateEbookInfo">
+      update t_ebook t1, (select ebook_id, count(1) doc_count, sum(view_count) view_count, sum(vote_count) vote_count from t_doc group by ebook_id) t2
+        set t1.doc_count = t2.doc_count, t1.view_count = t2.view_count, t1.vote_count = t2.vote_count
+        where t1.id = t2.ebook_id;
+    </update>
+</mapper>
+

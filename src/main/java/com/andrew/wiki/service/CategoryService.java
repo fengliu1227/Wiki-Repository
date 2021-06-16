@@ -66,7 +66,6 @@ public class CategoryService {
 
     public void save(CategorySaveRequest req){
         Category category = CopyUtil.copy(req, Category.class);
-        System.out.println(category);
         category.setId(snowFlake.nextId());
         categoryMapper.insert(category);
     }

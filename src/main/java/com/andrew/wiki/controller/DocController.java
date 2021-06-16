@@ -2,6 +2,7 @@ package com.andrew.wiki.controller;
 
 import com.andrew.wiki.request.DocQueryRequest;
 import com.andrew.wiki.request.DocSaveRequest;
+import com.andrew.wiki.request.DocVoteRequest;
 import com.andrew.wiki.response.DocQueryResponse;
 import com.andrew.wiki.response.CommonResponse;
 import com.andrew.wiki.response.PageResponse;
@@ -65,6 +66,21 @@ public class DocController {
         CommonResponse commonResponse = new CommonResponse<>();
         List<String> list = Arrays.asList(idsStr.split(","));
         docService.delete(list);
+        return commonResponse;
+    }
+
+    @PostMapping("/doc/vote")
+    public CommonResponse vote(@RequestBody DocVoteRequest req){
+        CommonResponse<DocQueryResponse> commonResponse = new CommonResponse<>();
+        DocQueryResponse docQueryResponse = docService.vote(req);
+        commonResponse.setContent(docQueryResponse);
+        return commonResponse;
+    }
+    @GetMapping("/doc/vote")
+    public CommonResponse isVoted(@RequestParam("userId")Long userId, @RequestParam("docId") Long docId){
+        CommonResponse<Boolean> commonResponse = new CommonResponse<>();
+        Boolean res = docService.isVoted(userId, docId);
+        commonResponse.setContent(res);
         return commonResponse;
     }
 }

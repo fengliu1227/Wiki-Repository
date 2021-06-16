@@ -18,17 +18,16 @@
           <div>
             <h2>{{doc.name}}</h2>
             <div>
-              <span>阅读数：{{doc.viewCount}}</span> &nbsp; &nbsp;
-              <span>点赞数：{{doc.voteCount}}</span>
+              <span>views：{{doc.viewCount}}</span> &nbsp; &nbsp;
+              <span>Votes：{{doc.voteCount}}</span>
+              <a-button id="vote-btn" type="primary" shape="round" :size="'small'" @click="vote" :disabled="isVoted">
+                <template #icon><LikeOutlined /> &nbsp;Vote </template>
+              </a-button>
             </div>
             <a-divider style="height: 2px; background-color: #9999cc"/>
           </div>
           <div class="wangeditor" :innerHTML="html"></div>
-          <div class="vote-div">
-            <a-button type="primary" shape="round" :size="'large'" @click="vote">
-              <template #icon><LikeOutlined /> &nbsp;点赞：{{doc.voteCount}} </template>
-            </a-button>
-          </div>
+
         </a-col>
       </a-row>
     </a-layout-content>
@@ -36,15 +35,20 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref, createVNode } from 'vue';
+  import {defineComponent, onMounted, ref, createVNode, computed} from 'vue';
   import axios from 'axios';
   import {message} from 'ant-design-vue';
   import {Tool} from "@/util/tool";
   import {useRoute} from "vue-router";
+  import store from "@/store";
 
   export default defineComponent({
     name: 'Doc',
-    setup() {
+    setup: function () {
+      const curUser = computed(() => store.state.user);
+      const isVoted = ref();
+      const voteRequest = ref();
+      voteRequest.value={};
       const route = useRoute();
       const docs = ref();
       const html = ref();
@@ -75,11 +79,12 @@
         axios.get("/content/" + id).then((response) => {
           const data = response.data;
           if (data.success) {
-            if(data.content && data.content.content){
+            if (data.content && data.content.content) {
               html.value = data.content.content;
-            }else{
+            } else {
               html.value = "";
             }
+            checkIsVoted(id, curUser.value.id);
           } else {
             message.error(data.message);
           }
@@ -110,6 +115,17 @@
         });
       };
 
+      const checkIsVoted = (docId: any, userId: any) => {
+        axios.get("/doc/vote?userId="+userId+"&docId="+docId).then((response) => {
+          const data = response.data;
+          if (data.success) {
+            isVoted.value = data.content;
+          } else {
+            message.error(data.message);
+          }
+        });
+      }
+
       const onSelect = (selectedKeys: any, info: any) => {
         console.log('selected', selectedKeys, info);
         if (Tool.isNotEmpty(selectedKeys)) {
@@ -122,13 +138,18 @@
 
       // 点赞
       const vote = () => {
-        axios.get('/doc/vote/' + doc.value.id).then((response) => {
+        voteRequest.value = {
+          docId: doc.value.id,
+          userId: curUser.value.id
+        }
+        axios.post('/doc/vote', voteRequest.value).then((response) => {
           const data = response.data;
           if (data.success) {
             doc.value.voteCount++;
           } else {
             message.error(data.message);
           }
+          isVoted.value = true;
         });
       };
 
@@ -142,7 +163,8 @@
         onSelect,
         defaultSelectedKeys,
         doc,
-        vote
+        vote,
+        isVoted
       }
     }
   });
@@ -205,9 +227,9 @@
   }
 
   /* 点赞 */
-  .vote-div {
-    padding: 15px;
+  #vote-btn {
     text-align: center;
+    float: right;
   }
 
   /* 图片自适应 */

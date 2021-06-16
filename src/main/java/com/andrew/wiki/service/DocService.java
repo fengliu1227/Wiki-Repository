@@ -1,13 +1,12 @@
 package com.andrew.wiki.service;
 
-import com.andrew.wiki.domain.Content;
-import com.andrew.wiki.domain.ContentExample;
-import com.andrew.wiki.domain.Doc;
-import com.andrew.wiki.domain.DocExample;
-import com.andrew.wiki.mapper.ContentMapper;
-import com.andrew.wiki.mapper.DocMapper;
+import com.andrew.wiki.domain.*;
+import com.andrew.wiki.exception.BusinessException;
+import com.andrew.wiki.exception.BusinessExceptionCode;
+import com.andrew.wiki.mapper.*;
 import com.andrew.wiki.request.DocQueryRequest;
 import com.andrew.wiki.request.DocSaveRequest;
+import com.andrew.wiki.request.DocVoteRequest;
 import com.andrew.wiki.response.DocQueryResponse;
 import com.andrew.wiki.response.PageResponse;
 import com.andrew.wiki.util.CopyUtil;
@@ -19,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -32,6 +33,15 @@ public class DocService {
 
     @Autowired
     private ContentMapper contentMapper;
+
+    @Autowired
+    private DocCustMapper docCustMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private User2VoteMapper user2VoteMapper;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -92,6 +102,8 @@ public class DocService {
         Content content = CopyUtil.copy(req, Content.class);
         doc.setId(snowFlake.nextId());
         content.setId(doc.getId());
+        doc.setViewCount(0);
+        doc.setVoteCount(0);
         docMapper.insert(doc);
         contentMapper.insert(content);
 
@@ -110,6 +122,50 @@ public class DocService {
         ContentExample.Criteria contentCriteria = contentExample.createCriteria();;
         contentCriteria.andIdIn(ids);
         contentMapper.deleteByExample(contentExample);
+    }
+
+    public DocQueryResponse vote(DocVoteRequest req){
+        User userDb = userMapper.selectByPrimaryKey(req.getUserId());
+        if(ObjectUtils.isEmpty(userDb)){
+            throw new BusinessException(BusinessExceptionCode.UNEXISTED_USER);
+        }
+        User2VoteExample user2VoteExample = new User2VoteExample();
+        User2VoteExample.Criteria criteria = user2VoteExample.createCriteria();
+        criteria.andDocIdEqualTo(req.getDocId());
+        criteria.andUserIdEqualTo(req.getUserId());
+        List<User2Vote> user2Votes = user2VoteMapper.selectByExample(user2VoteExample);
+        if(!CollectionUtils.isEmpty(user2Votes) || user2Votes.size() > 1){
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
+        User2Vote user2Vote = new User2Vote();
+        user2Vote.setDocId(req.getDocId());
+        user2Vote.setUserId(req.getUserId());
+        user2Vote.setId(snowFlake.nextId());
+        user2VoteMapper.insert(user2Vote);
+        docCustMapper.increaseVoteCount(req.getDocId());
+        Doc docDb = docMapper.selectByPrimaryKey(req.getDocId());
+        DocQueryResponse docQueryResponse = CopyUtil.copy(docDb, DocQueryResponse.class);
+        return docQueryResponse;
+    }
+
+    public Boolean isVoted(Long userId, Long docId){
+        User userDb = userMapper.selectByPrimaryKey(userId);
+        if(ObjectUtils.isEmpty(userDb)){
+            throw new BusinessException(BusinessExceptionCode.UNEXISTED_USER);
+        }
+        User2VoteExample user2VoteExample = new User2VoteExample();
+        User2VoteExample.Criteria criteria = user2VoteExample.createCriteria();
+        criteria.andDocIdEqualTo(docId);
+        criteria.andUserIdEqualTo(userId);
+        List<User2Vote> user2Votes = user2VoteMapper.selectByExample(user2VoteExample);
+        if(!CollectionUtils.isEmpty(user2Votes) || user2Votes.size() > 1){
+            return true;
+        }
+        return false;
+    }
+
+    public void updateEbookInfo(){
+        docCustMapper.updateEbookInfo();
     }
 
 }

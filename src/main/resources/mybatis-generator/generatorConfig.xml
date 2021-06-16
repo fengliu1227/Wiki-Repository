@@ -43,6 +43,7 @@
 <!--        <table tableName="t_doc" domainObjectName="Doc"/>-->
 <!--        <table tableName="t_category" domainObjectName="Category"/>-->
 <!--        <table tableName="t_user" domainObjectName="User"/>-->
-        <table tableName="t_content" domainObjectName="Content"/>
+<!--        <table tableName="t_content" domainObjectName="Content"/>-->
+        <table tableName="t_user2vote" domainObjectName="User2Vote"/>
     </context>
 </generatorConfiguration>

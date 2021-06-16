@@ -1,12 +1,3 @@
-drop table if exists `t_user`;
-create table `t_user`
-(
-    `id`   bigint not null comment 'id',
-    `name` varchar(50) comment 'name',
-    `password` varchar(50) comment 'password',
-    primary key (`id`)
-)engine=innodb default charset=utf8mb4;
-
 drop table if exists `t_ebook`;
 create table `t_ebook`
 (
@@ -80,3 +71,27 @@ create table `t_content` (
                            `content` mediumtext not null comment '内容',
                            primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='文档内容';
+
+-- user
+drop table if exists `t_user`;
+create table `t_user` (
+                        `id` bigint not null comment 'ID',
+                        `login_name` varchar(50) not null comment '登陆名',
+                        `name` varchar(50) comment '昵称',
+                        `password` char(32) not null comment '密码',
+                        `role` char(32) not null default 'ROLE_USER' comment 'Role',
+                        primary key (`id`),
+                        unique key `login_name_unique` (`login_name`)
+) engine=innodb default charset=utf8mb4 comment='用户';
+
+insert into `t_user` (id, `login_name`, `name`, `password`, `role` ) values (1, 'user1', 'user1', '0d8d5cd06832b29560745fe4e1b941cf', 'ROLE_USER');
+insert into `t_user` (id, `login_name`, `name`, `password`, `role` ) values (2, 'admin1', 'admin1', 'c3284d0f94606de1fd2af172aba15bf3', 'ROLE_ADMIN');
+
+-- user-vote schemas
+drop table if exists `t_user2vote`;
+create table `t_user2vote` (
+                          `id` bigint not null comment 'ID',
+                          `user_id` bigint not null comment 'userId',
+                          `doc_id` bigint not null comment 'DocId',
+                          primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='user2vote';

@@ -18,13 +18,8 @@ import java.util.List;
 public class EBookController {
 
     @Autowired
-    private UserService userservice;
-    @Autowired
     private EBookService eBookService;
-    @GetMapping("/hello")
-    public List<User> hello(){
-        return userservice.getAll();
-    }
+
 
     @GetMapping("/ebook/list")
     public CommonResponse getList(@Valid EBookQueryRequest req){

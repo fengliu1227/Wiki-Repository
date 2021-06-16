@@ -25,3 +25,15 @@ DELETE http://localhost:8080/doc/60108827672055808
 
 ###
 GET http://localhost:8080/doc/all/1
+
+###
+POST http://localhost:8080/doc/vote
+Content-type:application/json
+
+{
+  "docId": 1,
+  "userId": 1
+}
+
+###
+GET http://localhost:8080/doc/vote?userId=1&docId=1

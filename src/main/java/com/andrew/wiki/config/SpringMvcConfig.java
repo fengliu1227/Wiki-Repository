@@ -17,6 +17,15 @@
 //    public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(loginInterceptor)
 //                .addPathPatterns("/**")
-//                .excludePathPatterns("/login");
+//                .excludePathPatterns("/user/login",
+//                        "/category/list",
+//                        "/ebook/list",
+//                        "/doc/all/**",
+//                        "/doc/list",
+//                        "/content/**",
+//                        "/category",
+//                        "/redis/**",
+//                        "/content/**"
+//                );
 //    }
 //}

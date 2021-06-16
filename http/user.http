@@ -1,0 +1,21 @@
+GET http://localhost:8080/user
+
+###
+GET http://localhost:8080/user/list?page=1&size=500
+
+###
+PUT http://localhost:8080/user/1/password
+Content-type:application/json
+
+{
+  "password": "TEST1234"
+}
+
+###
+POST http://localhost:8080/user/login
+Content-type:application/json
+
+{
+  "loginName": "test",
+  "password": "test1234"
+}

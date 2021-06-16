@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.andrew.wiki.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.andrew.wiki.domain.User">
+<mapper namespace="com.andrew.wiki.mapper.User2VoteMapper">
+  <resultMap id="BaseResultMap" type="com.andrew.wiki.domain.User2Vote">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="password" jdbcType="CHAR" property="password" />
-    <result column="role" jdbcType="CHAR" property="role" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="doc_id" jdbcType="BIGINT" property="docId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, login_name, `name`, `password`, `role`
+    id, user_id, doc_id
   </sql>
-  <select id="selectByExample" parameterType="com.andrew.wiki.domain.UserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.andrew.wiki.domain.User2VoteExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_user
+    from t_user2vote
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,85 +84,67 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_user
+    from t_user2vote
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_user
+    delete from t_user2vote
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.andrew.wiki.domain.UserExample">
-    delete from t_user
+  <delete id="deleteByExample" parameterType="com.andrew.wiki.domain.User2VoteExample">
+    delete from t_user2vote
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.andrew.wiki.domain.User">
-    insert into t_user (id, login_name, `name`, 
-      `password`, `role`)
-    values (#{id,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{password,jdbcType=CHAR}, #{role,jdbcType=CHAR})
+  <insert id="insert" parameterType="com.andrew.wiki.domain.User2Vote">
+    insert into t_user2vote (id, user_id, doc_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{docId,jdbcType=BIGINT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.andrew.wiki.domain.User">
-    insert into t_user
+  <insert id="insertSelective" parameterType="com.andrew.wiki.domain.User2Vote">
+    insert into t_user2vote
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="loginName != null">
-        login_name,
+      <if test="userId != null">
+        user_id,
       </if>
-      <if test="name != null">
-        `name`,
-      </if>
-      <if test="password != null">
-        `password`,
-      </if>
-      <if test="role != null">
-        `role`,
+      <if test="docId != null">
+        doc_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="loginName != null">
-        #{loginName,jdbcType=VARCHAR},
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        #{password,jdbcType=CHAR},
-      </if>
-      <if test="role != null">
-        #{role,jdbcType=CHAR},
+      <if test="docId != null">
+        #{docId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.andrew.wiki.domain.UserExample" resultType="java.lang.Long">
-    select count(*) from t_user
+  <select id="countByExample" parameterType="com.andrew.wiki.domain.User2VoteExample" resultType="java.lang.Long">
+    select count(*) from t_user2vote
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_user
+    update t_user2vote
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.loginName != null">
-        login_name = #{record.loginName,jdbcType=VARCHAR},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
-      <if test="record.name != null">
-        `name` = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.password != null">
-        `password` = #{record.password,jdbcType=CHAR},
-      </if>
-      <if test="record.role != null">
-        `role` = #{record.role,jdbcType=CHAR},
+      <if test="record.docId != null">
+        doc_id = #{record.docId,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -172,40 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_user
+    update t_user2vote
     set id = #{record.id,jdbcType=BIGINT},
-      login_name = #{record.loginName,jdbcType=VARCHAR},
-      `name` = #{record.name,jdbcType=VARCHAR},
-      `password` = #{record.password,jdbcType=CHAR},
-      `role` = #{record.role,jdbcType=CHAR}
+      user_id = #{record.userId,jdbcType=BIGINT},
+      doc_id = #{record.docId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.andrew.wiki.domain.User">
-    update t_user
+  <update id="updateByPrimaryKeySelective" parameterType="com.andrew.wiki.domain.User2Vote">
+    update t_user2vote
     <set>
-      <if test="loginName != null">
-        login_name = #{loginName,jdbcType=VARCHAR},
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        `password` = #{password,jdbcType=CHAR},
-      </if>
-      <if test="role != null">
-        `role` = #{role,jdbcType=CHAR},
+      <if test="docId != null">
+        doc_id = #{docId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.andrew.wiki.domain.User">
-    update t_user
-    set login_name = #{loginName,jdbcType=VARCHAR},
-      `name` = #{name,jdbcType=VARCHAR},
-      `password` = #{password,jdbcType=CHAR},
-      `role` = #{role,jdbcType=CHAR}
+  <update id="updateByPrimaryKey" parameterType="com.andrew.wiki.domain.User2Vote">
+    update t_user2vote
+    set user_id = #{userId,jdbcType=BIGINT},
+      doc_id = #{docId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

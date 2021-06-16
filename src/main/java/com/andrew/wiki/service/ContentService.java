@@ -5,6 +5,7 @@ import com.andrew.wiki.domain.ContentExample;
 import com.andrew.wiki.domain.Doc;
 import com.andrew.wiki.domain.DocExample;
 import com.andrew.wiki.mapper.ContentMapper;
+import com.andrew.wiki.mapper.DocCustMapper;
 import com.andrew.wiki.mapper.DocMapper;
 import com.andrew.wiki.request.DocQueryRequest;
 import com.andrew.wiki.request.DocSaveRequest;
@@ -30,8 +31,12 @@ public class ContentService {
     @Autowired
     private ContentMapper contentMapper;
 
+    @Autowired
+    DocCustMapper docCustMapper;
+
     public ContentResponse getById(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
+        docCustMapper.increaseViewCount(id);
         ContentResponse contentResponse = CopyUtil.copy(content, ContentResponse.class);
         return contentResponse;
     }
