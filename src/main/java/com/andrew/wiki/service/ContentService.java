@@ -7,6 +7,7 @@ import com.andrew.wiki.domain.DocExample;
 import com.andrew.wiki.mapper.ContentMapper;
 import com.andrew.wiki.mapper.DocCustMapper;
 import com.andrew.wiki.mapper.DocMapper;
+import com.andrew.wiki.mapper.EBookCustMapper;
 import com.andrew.wiki.request.DocQueryRequest;
 import com.andrew.wiki.request.DocSaveRequest;
 import com.andrew.wiki.response.ContentResponse;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,11 +34,20 @@ public class ContentService {
     private ContentMapper contentMapper;
 
     @Autowired
-    DocCustMapper docCustMapper;
+    private DocCustMapper docCustMapper;
 
+    @Autowired
+    private DocMapper docMapper;
+
+    @Autowired
+    private EBookCustMapper eBookCustMapper;
+
+    @Transactional
     public ContentResponse getById(Long id){
         Content content = contentMapper.selectByPrimaryKey(id);
         docCustMapper.increaseViewCount(id);
+        Long eBookId = docMapper.selectByPrimaryKey(id).getEbookId();
+        eBookCustMapper.increaseViewCount(eBookId);
         ContentResponse contentResponse = CopyUtil.copy(content, ContentResponse.class);
         return contentResponse;
     }

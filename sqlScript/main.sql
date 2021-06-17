@@ -7,9 +7,9 @@ create table `t_ebook`
     `category2_id`   bigint comment 'category2',
     `description`   varchar(200) comment 'description',
     `cover`   varchar(200) comment 'cover',
-    `doc_count` int comment 'doc_count',
-    `view_count` int comment 'view_count',
-    `vote_count` int comment 'vote_count',
+    `doc_count` int default 0 comment 'doc_count',
+    `view_count` int default 0 comment 'view_count',
+    `vote_count` int default 0 comment 'vote_count',
     primary key (`id`)
 ) engine=innodb default charset=utf8mb4;
 

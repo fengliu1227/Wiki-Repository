@@ -16,9 +16,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -45,7 +48,10 @@ public class DocService {
     private User2VoteMapper user2VoteMapper;
 
     @Autowired
-    private WebSocketServer webSocketServer;
+    private WsService wsService;
+
+    @Autowired
+    private EBookCustMapper eBookCustMapper;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -91,6 +97,7 @@ public class DocService {
         return resList;
     }
 
+    @Transactional
     public void update(DocSaveRequest req){
         Doc doc = CopyUtil.copy(req, Doc.class);
         Content content = CopyUtil.copy(req, Content.class);
@@ -101,6 +108,7 @@ public class DocService {
         }
     }
 
+    @Transactional
     public void save(DocSaveRequest req){
         Doc doc = CopyUtil.copy(req, Doc.class);
         Content content = CopyUtil.copy(req, Content.class);
@@ -110,24 +118,31 @@ public class DocService {
         doc.setVoteCount(0);
         docMapper.insert(doc);
         contentMapper.insert(content);
-
+        eBookCustMapper.increaseDocCount(doc.getEbookId());
     }
 
     public void delete(Long id){
         docMapper.deleteByPrimaryKey(id);
     }
 
+
+    @Transactional
     public void delete(List<String> ids){
         DocExample docExample = new DocExample();
         DocExample.Criteria criteria = docExample.createCriteria();
         criteria.andIdIn(ids);
+        Long eBookId = docMapper.selectByPrimaryKey(Long.parseLong(ids.get(0))).getEbookId();
         docMapper.deleteByExample(docExample);
         ContentExample contentExample = new ContentExample();
         ContentExample.Criteria contentCriteria = contentExample.createCriteria();;
         contentCriteria.andIdIn(ids);
         contentMapper.deleteByExample(contentExample);
+        Integer nums = ids.size();
+        eBookCustMapper.decreaseDocCount(nums, eBookId);
     }
 
+
+    @Transactional
     public DocQueryResponse vote(DocVoteRequest req){
         User userDb = userMapper.selectByPrimaryKey(req.getUserId());
         if(ObjectUtils.isEmpty(userDb)){
@@ -150,10 +165,12 @@ public class DocService {
         Doc docDb = docMapper.selectByPrimaryKey(req.getDocId());
         DocQueryResponse docQueryResponse = CopyUtil.copy(docDb, DocQueryResponse.class);
 
-        //send message to all user
-        webSocketServer.sendInfo(docDb.getName() + " was Voted by " + userDb.getName());
+        eBookCustMapper.increaseVoteCount(docDb.getEbookId());
+        String logId = MDC.get("LOG_ID");
+        wsService.sendInfo(docDb.getName(), userDb.getName(), logId);
         return docQueryResponse;
     }
+
 
     public Boolean isVoted(Long userId, Long docId){
         User userDb = userMapper.selectByPrimaryKey(userId);

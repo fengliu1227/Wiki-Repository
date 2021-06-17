@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.andrew.wiki.mapper.EBookCustMapper">
+    <update id="increaseViewCount">
+      update t_ebook set view_count = view_count + 1 where id = #{id}
+    </update>
+    <update id="increaseVoteCount">
+      update t_ebook set vote_count = vote_count + 1 where id = #{id}
+    </update>
+
+    <update id="increaseDocCount">
+      update t_ebook set doc_count = doc_count + 1 where id = #{id}
+    </update>
+
+    <update id="decreaseDocCount">
+      update t_ebook set doc_count = doc_count - #{nums} where id = #{id}
+    </update>
+</mapper>
+

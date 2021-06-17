@@ -169,8 +169,13 @@
             level1.value = [];
             level1.value = Tool.array2Tree(docs.value, 0);
 
-            treeSelectData.value = Tool.copy(level1.value);
-            treeSelectData.value.unshift({id:0, name:'None'});
+
+            if(Tool.isEmpty(level1.value)){
+              treeSelectData.value.unshift({id:0, name:'None'});
+            }else{
+              treeSelectData.value = Tool.copy(level1.value);
+              treeSelectData.value.unshift({id:0, name:'None'});
+            }
           }else{
             message.error(data.message);
           }
