@@ -28,7 +28,7 @@ public class DocJob {
     public void cron() {
         // 增加日志流水号
 //        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
-//        LOG.info("更新电子书下的文档数据开始");
+        LOG.info("update t_Ebook data start");
         long start = System.currentTimeMillis();
         docService.updateEbookInfo();
         LOG.info("update t_Ebook data，time consuming：{}ms", System.currentTimeMillis() - start);

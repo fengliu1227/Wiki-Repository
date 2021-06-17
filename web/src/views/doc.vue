@@ -81,6 +81,7 @@
           if (data.success) {
             if (data.content && data.content.content) {
               html.value = data.content.content;
+              doc.value.viewCount++;
             } else {
               html.value = "";
             }
@@ -116,14 +117,16 @@
       };
 
       const checkIsVoted = (docId: any, userId: any) => {
-        axios.get("/doc/vote?userId="+userId+"&docId="+docId).then((response) => {
-          const data = response.data;
-          if (data.success) {
-            isVoted.value = data.content;
-          } else {
-            message.error(data.message);
-          }
-        });
+        if(!Tool.isEmpty(userId)){
+          axios.get("/doc/vote?userId="+userId+"&docId="+docId).then((response) => {
+            const data = response.data;
+            if (data.success) {
+              isVoted.value = data.content;
+            } else {
+              message.error(data.message);
+            }
+          });
+        }
       }
 
       const onSelect = (selectedKeys: any, info: any) => {
