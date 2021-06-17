@@ -27,7 +27,7 @@ public class DocJob {
     @Scheduled(cron = "5/30 * * * * ?")
     public void cron() {
         // 增加日志流水号
-//        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
+        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
         LOG.info("update t_Ebook data start");
         long start = System.currentTimeMillis();
         docService.updateEbookInfo();

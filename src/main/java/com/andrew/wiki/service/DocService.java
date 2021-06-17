@@ -11,6 +11,7 @@ import com.andrew.wiki.response.DocQueryResponse;
 import com.andrew.wiki.response.PageResponse;
 import com.andrew.wiki.util.CopyUtil;
 import com.andrew.wiki.util.SnowFlake;
+import com.andrew.wiki.websocket.WebSocketServer;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -42,6 +43,9 @@ public class DocService {
 
     @Autowired
     private User2VoteMapper user2VoteMapper;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -145,6 +149,9 @@ public class DocService {
         docCustMapper.increaseVoteCount(req.getDocId());
         Doc docDb = docMapper.selectByPrimaryKey(req.getDocId());
         DocQueryResponse docQueryResponse = CopyUtil.copy(docDb, DocQueryResponse.class);
+
+        //send message to all user
+        webSocketServer.sendInfo(docDb.getName() + " was Voted by " + userDb.getName());
         return docQueryResponse;
     }
 
