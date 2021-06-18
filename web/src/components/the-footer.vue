@@ -1,6 +1,6 @@
 <template>
     <a-layout-footer style="text-align: center">
-        Andrew's wiki repository  <span v-show="user.id">，Welcome: {{user.name}}</span>
+        Andrew's wiki repository
     </a-layout-footer>
 </template>
 

@@ -37,6 +37,10 @@
                 <span>Login</span>
             </a>
 
+            <a class="login-menu" v-show="!user.id" @click="showRegisterModal" >
+                <span>Register</span>
+            </a>
+
         </a-menu>
 
         <a-modal
@@ -54,6 +58,27 @@
                 </a-form-item>
             </a-form>
         </a-modal>
+
+        <a-modal
+                title="Register"
+                v-model:visible="registerModalVisible"
+                :confirm-loading="registerModalLoading"
+                @ok="register"
+        >
+            <a-form :model="RegisterUser" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+                <a-form-item label="LoginName">
+                    <a-input v-model:value="RegisterUser.loginName" :disabled="!!user.id"/>
+                </a-form-item>
+                <a-form-item label="Name">
+                    <a-input v-model:value="RegisterUser.name" />
+                </a-form-item>
+                <a-form-item label="Password" v-show="!user.id">
+                    <a-input v-model:value="RegisterUser.password" type="password"/>
+                </a-form-item>
+            </a-form>
+        </a-modal>
+
+
     </a-layout-header>
 </template>
 
@@ -62,6 +87,7 @@
     import axios from 'axios';
     import { message } from 'ant-design-vue';
     import store from "@/store";
+    import { Tool } from '@/util/tool';
 
 
     const hexMd5 = require('js-md5');
@@ -77,14 +103,39 @@
                 loginName: "user1",
                 password: "user"
             });
+            const RegisterUser = ref();
+            RegisterUser.value={};
             const loginModalVisible = ref(false);
             const loginModalLoading = ref(false);
             const showLoginModal = () => {
                 loginModalVisible.value = true;
             };
 
+
+            const registerModalVisible = ref(false);
+            const registerModalLoading = ref(false);
+            const showRegisterModal = () => {
+                registerModalVisible.value = true;
+            };
+
+
             // login
-            const login = () => {
+            const login = (givenUser: any) => {
+                if(Tool.isNotEmpty(givenUser)){
+                    console.log("=============11111111");
+                    axios.post('/user/login', givenUser.value).then((response) => {
+                        loginModalLoading.value = false;
+                        const data = response.data;
+                        if (data.success) {
+                            loginModalVisible.value = false;
+                            message.success("Login successfully！");
+
+                            store.commit("setUser", data.content);
+                        } else {
+                            message.error(data.message);
+                        }
+                    });
+                }
                 loginModalLoading.value = true;
                 loginUser.value.password = hexMd5(loginUser.value.password);
                 axios.post('/user/login', loginUser.value).then((response) => {
@@ -114,6 +165,28 @@
                 });
             };
 
+            //register
+
+            const register = () => {
+                console.log("===========", RegisterUser.value);
+                console.log("===========", loginUser.value);
+                registerModalLoading.value = true;
+                RegisterUser.value.password = hexMd5(RegisterUser.value.password );
+                    axios.post("/user", RegisterUser.value).then((response) =>{
+                        registerModalLoading.value = false;
+                        const data = response.data;
+                        if (data.success) {
+
+                            //login
+                            login(RegisterUser);
+                            registerModalVisible.value = false;
+                        }else {
+                            message.error(data.message);
+                        }
+                    })
+
+            };
+
             return {
                 loginModalVisible,
                 loginModalLoading,
@@ -121,7 +194,12 @@
                 loginUser,
                 login,
                 user,
-                logout
+                logout,
+                register,
+                registerModalVisible,
+                registerModalLoading,
+                showRegisterModal,
+                RegisterUser
             }
         }
     });

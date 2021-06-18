@@ -6,7 +6,7 @@
       <p>
         <a-form layout="inline" :model="param">
           <a-form-item>
-            <a-input v-model:value="param.loginName" placeholder="登陆名">
+            <a-input v-model:value="param.loginName" placeholder="LoginName">
             </a-input>
           </a-form-item>
           <a-form-item>
