@@ -11,12 +11,12 @@
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
-              查询
+              Search
             </a-button>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="add()">
-              新增
+              Add
             </a-button>
           </a-form-item>
         </a-form>
@@ -32,19 +32,19 @@
         <template v-slot:action="{ text, record }">
           <a-space size="small">
             <a-button type="primary" @click="resetPassword(record)">
-              重置密码
+              reset password
             </a-button>
             <a-button type="primary" @click="edit(record)">
-              编辑
+              Edit
             </a-button>
             <a-popconfirm
-                    title="删除后不可恢复，确认删除?"
-                    ok-text="是"
-                    cancel-text="否"
+                    title="Unrecoverable after deletion, Are you sure to delete？"
+                    ok-text="Yes"
+                    cancel-text="No"
                     @confirm="handleDelete(record.id)"
             >
               <a-button type="danger">
-                删除
+                Delete
               </a-button>
             </a-popconfirm>
           </a-space>
@@ -54,32 +54,32 @@
   </a-layout>
 
   <a-modal
-          title="用户表单"
+          title="User From"
           v-model:visible="modalVisible"
           :confirm-loading="modalLoading"
           @ok="handleModalOk"
   >
     <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="登陆名">
+      <a-form-item label="LoginName">
         <a-input v-model:value="user.loginName" :disabled="!!user.id"/>
       </a-form-item>
-      <a-form-item label="昵称">
+      <a-form-item label="Name">
         <a-input v-model:value="user.name" />
       </a-form-item>
-      <a-form-item label="密码" v-show="!user.id">
+      <a-form-item label="Password" v-show="!user.id">
         <a-input v-model:value="user.password" type="password"/>
       </a-form-item>
     </a-form>
   </a-modal>
 
   <a-modal
-          title="重置密码"
+          title="Reset Password"
           v-model:visible="resetModalVisible"
           :confirm-loading="resetModalLoading"
           @ok="handleResetModalOk"
   >
     <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-      <a-form-item label="新密码">
+      <a-form-item label="new password">
         <a-input v-model:value="user.password" type="password"/>
       </a-form-item>
     </a-form>
@@ -109,15 +109,15 @@
 
       const columns = [
         {
-          title: '登陆名',
+          title: 'LoginName',
           dataIndex: 'loginName'
         },
         {
-          title: '名称',
+          title: 'Name',
           dataIndex: 'name'
         },
         {
-          title: '密码',
+          title: 'Password',
           dataIndex: 'password'
         },
         {
@@ -128,11 +128,10 @@
       ];
 
       /**
-       * 数据查询
+       * data query
        **/
       const handleQuery = (params: any) => {
         loading.value = true;
-        // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
         users.value = [];
         axios.get("/user/list", {
           params: {
@@ -146,7 +145,6 @@
           if (data.success) {
             users.value = data.content.list;
 
-            // 重置分页按钮
             pagination.value.current = params.page;
             pagination.value.total = data.content.total;
           } else {
@@ -156,17 +154,16 @@
       };
 
       /**
-       * 表格点击页码时触发
+       * Triggered when the table clicks on the page number
        */
       const handleTableChange = (pagination: any) => {
-        console.log("看看自带的分页参数都有啥：" + pagination);
         handleQuery({
           page: pagination.current,
           size: pagination.pageSize
         });
       };
 
-      // -------- 表单 ---------
+      // -------- Form ---------
       const user = ref();
       const modalVisible = ref(false);
       const modalLoading = ref(false);
@@ -180,7 +177,6 @@
             if (data.success) {
               modalVisible.value = false;
 
-              // 重新加载列表
               handleQuery({
                 page: pagination.value.current,
                 size: pagination.value.pageSize,
@@ -196,7 +192,6 @@
             if (data.success) {
               modalVisible.value = false;
 
-              // 重新加载列表
               handleQuery({
                 page: pagination.value.current,
                 size: pagination.value.pageSize,
@@ -209,7 +204,7 @@
       };
 
       /**
-       * 编辑
+       * edit
        */
       const edit = (record: any) => {
         modalVisible.value = true;
@@ -217,7 +212,7 @@
       };
 
       /**
-       * 新增
+       * add
        */
       const add = () => {
         modalVisible.value = true;
@@ -228,7 +223,6 @@
         axios.delete("/user/" + id).then((response) => {
           const data = response.data; // data = commonResp
           if (data.success) {
-            // 重新加载列表
             handleQuery({
               page: pagination.value.current,
               size: pagination.value.pageSize,
@@ -239,7 +233,7 @@
         });
       };
 
-      // -------- 重置密码 ---------
+      // -------- reset password ---------
       const resetModalVisible = ref(false);
       const resetModalLoading = ref(false);
       const handleResetModalOk = () => {
@@ -252,7 +246,6 @@
           if (data.success) {
             resetModalVisible.value = false;
 
-            // 重新加载列表
             handleQuery({
               page: pagination.value.current,
               size: pagination.value.pageSize,
@@ -264,7 +257,7 @@
       };
 
       /**
-       * 重置密码
+       * reset password
        */
       const resetPassword = (record: any) => {
         resetModalVisible.value = true;

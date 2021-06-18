@@ -63,15 +63,15 @@ const router = createRouter({
   routes
 })
 
-// 路由登录拦截
+// Route login interception
 router.beforeEach((to, from, next) => {
   if (to.matched.some(function (item) {
-    console.log(item, "是否需要登录校验：", item.meta.loginRequire);
+    console.log(item, "login verification：", item.meta.loginRequire);
     return item.meta.loginRequire
   })) {
     const loginUser = store.state.user;
     if (Tool.isEmpty(loginUser)) {
-      console.log("用户未登录！");
+      console.log("User didn't login！");
       next('/');
     } else {
       if(loginUser.role === 'ROLE_ADMIN'){

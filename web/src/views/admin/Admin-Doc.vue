@@ -11,12 +11,12 @@
 
                 <a-form-item>
                   <a-button type="primary" @click="handleQuery()">
-                    查询
+                    Search
                   </a-button>
                 </a-form-item>
                 <a-form-item>
                   <a-button type="primary" @click="add()">
-                    新增
+                    Add
                   </a-button>
                 </a-form-item>
               </a-form>
@@ -41,7 +41,7 @@
                     Edit
                   </a-button>
                   <a-popconfirm
-                          title="删除后不可恢复，确认删除?"
+                          title="Unrecoverable after deletion, Are you sure to delete？"
                           ok-text="Yes"
                           cancel-text="No"
                           @confirm="handleDelete(record.id)"
@@ -59,7 +59,7 @@
               <a-form layout="inline" :model="param">
                 <a-form-item>
                   <a-button type="primary" @click="handleSave()">
-                    保存
+                    Save
                   </a-button>
                 </a-form-item>
               </a-form>
@@ -67,7 +67,7 @@
 
             <a-form :model="doc" layout="vertical">
               <a-form-item>
-                <a-input v-model:value="doc.name" placeholder="名称"/>
+                <a-input v-model:value="doc.name" placeholder="Name"/>
               </a-form-item>
 
 
@@ -79,7 +79,7 @@
                         style="width: 100%"
                         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
                         :tree-data="treeSelectData"
-                        placeholder="请选择父文档"
+                        placeholder="please select parent category"
                         tree-default-expand-all
                         :replaceFields="{title: 'name', key: 'id', value: 'id'}"
                 >
@@ -87,7 +87,7 @@
               </a-form-item>
 
               <a-form-item>
-                <a-input v-model:value="doc.sort" placeholder="顺序"/>
+                <a-input v-model:value="doc.sort" placeholder="sort"/>
               </a-form-item>
 
               <a-form-item>
@@ -142,7 +142,7 @@
 
       const columns = [
         {
-          title: '名称',
+          title: 'Name',
           dataIndex: 'name',
           slots: { customRender: 'name' }
         },
@@ -156,7 +156,7 @@
       const level1 = ref();
       level1.value=[];
       /**
-       * 数据查询
+       * data Query
        **/
       const handleQuery = () => {
         loading.value = true;
@@ -184,11 +184,7 @@
       };
 
 
-      // -------- 表单 ---------
-      /**
-       * 数组，[100, 101]对应：前端开发 / Vue
-       */
-
+      // -------- Form ---------
       const doc = ref();
       doc.value = {
         ebookId: route.query.ebookId
@@ -206,7 +202,7 @@
             const data = response.data;
             if (data.success) {
               message.success("update successfully");
-              // 重新加载列表
+              // reload
               handleQuery();
             }
           })
@@ -214,7 +210,7 @@
           axios.put("/doc", doc.value).then((response) => {
             const data = response.data;
             if (data.success) {
-              // 重新加载列表
+              // reload
               handleQuery();
             } else {
               message.error(data.message);
@@ -225,20 +221,20 @@
       };
 
       /**
-       * 将某节点及其子孙节点全部置为disabled
+       * Set a node and its descendants to disabled
        */
       const setDisable = (treeSelectData: any, id: any) => {
         // console.log(treeSelectData, id);
-        // 遍历数组，即遍历某一层节点
+        //Traverse the array, that is, traverse a certain layer of nodes
         for (let i = 0; i < treeSelectData.length; i++) {
           const node = treeSelectData[i];
           if (node.id === id) {
-            // 如果当前节点就是目标节点
+            // If the current node is the target node
             console.log("disabled", node);
-            // 将目标节点设置为disabled
+            // Set the target node to disabled
             node.disabled = true;
 
-            // 遍历所有子节点，将所有子节点全部都加上disabled
+            // Traverse all child nodes and add disabled to all child nodes
             const children = node.children;
             if (Tool.isNotEmpty(children)) {
               for (let j = 0; j < children.length; j++) {
@@ -246,7 +242,7 @@
               }
             }
           } else {
-            // 如果当前节点不是目标节点，则到其子节点再找找看。
+            // If the current node is not the target node, go to its child nodes and look for it again
             const children = node.children;
             if (Tool.isNotEmpty(children)) {
               setDisable(children, id);
@@ -260,22 +256,22 @@
       const deleteIds: Array<string> = [];
       const deleteNames: Array<string> = [];
       /**
-       * 查找整根树枝
+       * Find the whole branch
        */
       const getDeleteIds = (treeSelectData: any, id: any) => {
         // console.log(treeSelectData, id);
-        // 遍历数组，即遍历某一层节点
+        // Traverse the array, that is, traverse a certain layer of nodes
         for (let i = 0; i < treeSelectData.length; i++) {
           const node = treeSelectData[i];
           if (node.id === id) {
-            // 如果当前节点就是目标节点
+            // If the current node is the target node
             console.log("delete", node);
-            // 将目标ID放入结果集ids
+            // Put the target ID into the result set ids
             // node.disabled = true;
             deleteIds.push(id);
             deleteNames.push(node.name);
 
-            // 遍历所有子节点
+            // Traverse all child nodes
             const children = node.children;
             if (Tool.isNotEmpty(children)) {
               for (let j = 0; j < children.length; j++) {
@@ -283,7 +279,7 @@
               }
             }
           } else {
-            // 如果当前节点不是目标节点，则到其子节点再找找看。
+            // If the current node is not the target node, go to its child nodes and look for it again.
             const children = node.children;
             if (Tool.isNotEmpty(children)) {
               getDeleteIds(children, id);
@@ -294,7 +290,7 @@
 
 
       /**
-       * 内容查询
+       * Content Query
        **/
       const handleQueryContent = () => {
         axios.get("/content/" + doc.value.id).then((response) => {
@@ -310,23 +306,21 @@
       };
 
       /**
-       * 编辑
+       * edit
        */
       const edit = (record: any) => {
         editor.txt.html("");
         doc.value = Tool.copy(record);
         handleQueryContent();
 
-        // 不能选择当前节点及其所有子孙节点，作为父节点，会使树断开
         treeSelectData.value = Tool.copy(level1.value);
         setDisable(treeSelectData.value, record.id);
 
-        // 为选择树添加一个"无"
         treeSelectData.value.unshift({id: 0, name: 'None'});
       };
 
       /**
-       * 新增
+       * Add
        */
       const add = () => {
         editor.txt.html("");
@@ -336,38 +330,24 @@
 
         treeSelectData.value = Tool.copy(level1.value);
 
-        // 为选择树添加一个"无"
         treeSelectData.value.unshift({id: 0, name: '无'});
       };
 
-      // const handleDelete = (id: number) => {
-      //   getDeleteIds(level1.value, id);
-      //   axios.delete("/doc/" + deleteIds.join(",")).then((response) => {
-      //     const data = response.data;
-      //     if (data.success) {
-      //       // 重新加载列表
-      //       handleQuery();
-      //     } else {
-      //       message.error(data.message);
-      //     }
-      //   });
-      // };
+
       const handleDelete = (id: number) => {
-        // console.log(level1, level1.value, id)
-        // 清空数组，否则多次删除时，数组会一直增加
+
         deleteIds.length = 0;
         deleteNames.length = 0;
         getDeleteIds(level1.value, id);
         Modal.confirm({
-          title: '重要提醒',
+          title: 'Important Notice',
           icon: createVNode(ExclamationCircleOutlined),
-          content: '将删除：【' + deleteNames.join("，") + "】删除后不可恢复，确认删除？",
+          content: 'Deleting：【' + deleteNames.join("，") + "】"+ "Cannot be restored after deletion, confirm the deletion?",
           onOk() {
             // console.log(ids)
             axios.delete("/doc/" + deleteIds.join(",")).then((response) => {
               const data = response.data; // data = commonResp
               if (data.success) {
-                // 重新加载列表
                 handleQuery();
               } else {
                 message.error(data.message);
@@ -377,7 +357,7 @@
         });
       };
 
-      // ----------------富文本预览--------------
+      // ----------------Rich text preview--------------
       const drawerVisible = ref(false);
       const previewHtml = ref();
       const handlePreviewContent = () => {

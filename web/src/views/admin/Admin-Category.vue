@@ -8,12 +8,12 @@
 
           <a-form-item>
             <a-button type="primary" @click="handleQuery()">
-              查询
+              Search
             </a-button>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="add()">
-              新增
+              Add
             </a-button>
           </a-form-item>
         </a-form>
@@ -35,7 +35,7 @@
               Edit
             </a-button>
             <a-popconfirm
-                    title="删除后不可恢复，确认删除?"
+                    title="Unrecoverable after deletion, Are you sure to delete？"
                     ok-text="Yes"
                     cancel-text="No"
                     @confirm="handleDelete(record.id)"
@@ -51,15 +51,15 @@
   </a-layout>
 
   <a-modal
-          title="分类表单"
+          title="Classification form"
           v-model:visible="modalVisible"
           :confirm-loading="modalLoading"
           @ok="handleModalOk"
   >    <a-form :model="category" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-    <a-form-item label="名称">
+    <a-form-item label="Name">
       <a-input v-model:value="category.name" />
     </a-form-item>
-    <a-form-item label="父分类">
+    <a-form-item label="Parent category">
       <a-select
               v-model:value="category.parent"
               ref="select"
@@ -72,7 +72,7 @@
         </a-select-option>
       </a-select>
     </a-form-item>
-    <a-form-item label="顺序">
+    <a-form-item label="Sort">
       <a-input v-model:value="category.sort" />
     </a-form-item>
   </a-form>
@@ -97,16 +97,16 @@
 
       const columns = [
         {
-          title: '名称',
+          title: 'Name',
           dataIndex: 'name'
         },
         {
-          title: '父分类',
+          title: 'Parent category',
           key: 'parent',
           dataIndex: 'parent'
         },
         {
-          title: '顺序',
+          title: 'Sort',
           dataIndex: 'sort'
         },
         {
@@ -118,7 +118,7 @@
 
       const level1 = ref();
       /**
-       * 数据查询
+       * data query
        **/
       const handleQuery = () => {
         loading.value = true;
@@ -138,9 +138,9 @@
       };
 
 
-      // -------- 表单 ---------
+      // -------- Form ---------
       /**
-       * 数组，[100, 101]对应：前端开发 / Vue
+       * Array, [100, 101] corresponds to: front-end development / Vue
        */
       // const categoryIds = ref();
       const category = ref();
@@ -157,7 +157,7 @@
             if (data.success) {
               modalVisible.value = false;
 
-              // 重新加载列表
+              // reload
               handleQuery();
             }
           })
@@ -168,7 +168,7 @@
             if (data.success) {
               modalVisible.value = false;
 
-              // 重新加载列表
+              // reload
               handleQuery();
             } else {
               message.error(data.message);
@@ -180,7 +180,7 @@
 
 
       /**
-       * 编辑
+       * EDIT
        */
       const edit = (record: any) => {
         modalVisible.value = true;
@@ -189,7 +189,7 @@
       };
 
       /**
-       * 新增
+       * ADD
        */
       const add = () => {
         modalVisible.value = true;
@@ -200,7 +200,7 @@
         axios.delete("/category/" + id).then((response) => {
           const data = response.data;
           if (data.success) {
-            // 重新加载列表
+            // reload
             handleQuery();
           } else {
             message.error(data.message);

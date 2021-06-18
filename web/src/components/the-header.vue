@@ -7,49 +7,49 @@
                 :style="{ lineHeight: '64px'}"
         >
             <a-menu-item key="/">
-                <router-link to="/">首页</router-link>
+                <router-link to="/">Home</router-link>
             </a-menu-item>
             <a-menu-item key="/admin/user" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
-                <router-link to="/admin/user">用户管理</router-link>
+                <router-link to="/admin/user">User mgmt</router-link>
             </a-menu-item>
             <a-menu-item key="/admin/ebook" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
-                <router-link to="/admin/ebook">电子书管理</router-link>
+                <router-link to="/admin/ebook">Ebook mgmt</router-link>
             </a-menu-item>
             <a-menu-item key="/admin/category" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
-                <router-link to="/admin/category">分类管理</router-link>
+                <router-link to="/admin/category">Category mgmt</router-link>
             </a-menu-item>
                 <a-popconfirm
-                        title="确认退出登录?"
-                        ok-text="是"
-                        cancel-text="否"
+                        title="Are you sure to log out?"
+                        ok-text="Yes"
+                        cancel-text="No"
                         @confirm="logout()"
                 >
                     <a class="login-menu" v-show="user.id">
-                        <span>退出登录</span>
+                        <span>Log out</span>
                     </a>
                 </a-popconfirm>
 
             <a class="login-menu" v-show="user.id">
-                <span>您好：{{user.name}}</span>
+                <span>Hi：{{user.name}}</span>
             </a>
 
             <a class="login-menu" v-show="!user.id" @click="showLoginModal" >
-                <span>登录</span>
+                <span>Login</span>
             </a>
 
         </a-menu>
 
         <a-modal
-                title="登录"
+                title="Login"
                 v-model:visible="loginModalVisible"
                 :confirm-loading="loginModalLoading"
                 @ok="login"
         >
             <a-form :model="loginUser" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-                <a-form-item label="登录名">
+                <a-form-item label="LoginName">
                     <a-input v-model:value="loginUser.loginName" />
                 </a-form-item>
-                <a-form-item label="密码">
+                <a-form-item label="Password">
                     <a-input v-model:value="loginUser.password" type="password" />
                 </a-form-item>
             </a-form>
@@ -69,10 +69,10 @@
     export default defineComponent({
         name: 'the-header',
         setup () {
-            // 登录后保存
+            // store the user after login
             const user = computed(() => store.state.user);
 
-            // 用来登录
+            // use for login
             const loginUser = ref({
                 loginName: "user1",
                 password: "user"
@@ -83,7 +83,7 @@
                 loginModalVisible.value = true;
             };
 
-            // 登录
+            // login
             const login = () => {
                 loginModalLoading.value = true;
                 loginUser.value.password = hexMd5(loginUser.value.password);
@@ -92,7 +92,7 @@
                     const data = response.data;
                     if (data.success) {
                         loginModalVisible.value = false;
-                        message.success("登录成功！");
+                        message.success("Login successfully！");
 
                         store.commit("setUser", data.content);
                     } else {
@@ -101,12 +101,12 @@
                 });
             };
 
-            // 退出登录
+            // logout
             const logout = () => {
                 axios.post('/user/logout/' + user.value.token).then((response) => {
                     const data = response.data;
                     if (data.success) {
-                        message.success("退出登录成功！");
+                        message.success("Log out successfully！！");
                         store.commit("setUser", {});
                     } else {
                         message.error(data.message);

@@ -16,7 +16,7 @@ axios.interceptors.request.use(function (config) {
     const token = store.state.user.token;
     if (Tool.isNotEmpty(token)) {
         config.headers.token = token;
-        console.log("请求headers增加token:", token);
+        console.log("Request headers to add token:", token);
     }
     return config;
 }, error => {

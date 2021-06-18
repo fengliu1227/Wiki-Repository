@@ -6,17 +6,17 @@
       <p>
         <a-form layout="inline" :model="param">
           <a-form-item>
-            <a-input v-model:value="param.name" placeholder="登陆名">
+            <a-input v-model:value="param.name" placeholder="Login name">
             </a-input>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
-              查询
+              Search
             </a-button>
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="add()">
-              新增
+              Add
             </a-button>
           </a-form-item>
         </a-form>
@@ -41,7 +41,7 @@
 
             <router-link :to="'/admin/doc?ebookId=' + record.id">
               <a-button type="primary">
-                文档管理
+                Doc mgmt.
               </a-button>
             </router-link>
 
@@ -49,7 +49,7 @@
               Edit
             </a-button>
             <a-popconfirm
-                    title="删除后不可恢复，确认删除?"
+                    title="Unrecoverable after deletion, Are you sure to delete？"
                     ok-text="Yes"
                     cancel-text="No"
                     @confirm="handleDelete(record.id)"
@@ -65,25 +65,25 @@
   </a-layout>
 
   <a-modal
-          title="电子书表单"
+          title="Ebook form"
           v-model:visible="modalVisible"
           :confirm-loading="modalLoading"
           @ok="handleModalOk"
   ><a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
-    <a-form-item label="封面">
+    <a-form-item label="Cover">
       <a-input v-model:value="ebook.cover" />
     </a-form-item>
-    <a-form-item label="名称">
+    <a-form-item label="Name">
       <a-input v-model:value="ebook.name" />
     </a-form-item>
-    <a-form-item label="分类">
+    <a-form-item label="Category">
       <a-cascader
               v-model:value="categoryIds"
               :field-names="{ label: 'name', value: 'id', children: 'children' }"
               :options="level1"
       />
     </a-form-item>
-    <a-form-item label="描述">
+    <a-form-item label="Description">
       <a-input v-model:value="ebook.description" type="textarea" />
     </a-form-item>
   </a-form>
@@ -113,28 +113,28 @@
 
       const columns = [
         {
-          title: '封面',
+          title: 'Cover',
           dataIndex: 'cover',
           slots: { customRender: 'cover' }
         },
         {
-          title: '名称',
+          title: 'Name',
           dataIndex: 'name'
         },
         {
-          title: '分类',
+          title: 'Category',
           slots: { customRender: 'category' }
         },
         {
-          title: '文档数',
+          title: 'Doc',
           dataIndex: 'docCount'
         },
         {
-          title: '阅读数',
+          title: 'View',
           dataIndex: 'viewCount'
         },
         {
-          title: '点赞数',
+          title: 'Vote',
           dataIndex: 'voteCount'
         },
         {
@@ -145,7 +145,7 @@
       ];
 
       /**
-       * 数据查询
+       * data query
        **/
       const handleQuery = (params: any) => {
         loading.value = true;
@@ -161,7 +161,6 @@
           const data = response.data;
           if(data.success){
             ebooks.value = data.content.list;
-            // 重置分页按钮
             pagination.value.current = params.page;
             pagination.value.total = data.content.total;
           }else{
@@ -172,20 +171,16 @@
       };
 
       /**
-       * 表格点击页码时触发
+       * Triggered when the table clicks on the page number
        */
       const handleTableChange = (pagination: any) => {
-        console.log("看看自带的分页参数都有啥：" , pagination);
         handleQuery({
           page: pagination.current,
           size: pagination.pageSize
         });
       };
 
-      // -------- 表单 ---------
-      /**
-       * 数组，[100, 101]对应：前端开发 / Vue
-       */
+      // -------- Form ---------
       const categoryIds = ref();
       const ebook = ref();
       const modalVisible = ref(false);
@@ -201,7 +196,6 @@
             if (data.success) {
               modalVisible.value = false;
 
-              // 重新加载列表
               handleQuery({
                 page: pagination.value.current,
                 size: pagination.value.pageSize,
@@ -215,7 +209,6 @@
             if (data.success) {
               modalVisible.value = false;
 
-              // 重新加载列表
               handleQuery({
                 page: pagination.value.current,
                 size: pagination.value.pageSize,
@@ -229,7 +222,7 @@
 
 
       /**
-       * 编辑
+       * edit
        */
       const edit = (record: any) => {
         modalVisible.value = true;
@@ -238,7 +231,7 @@
       };
 
       /**
-       * 新增
+       * add
        */
       const add = () => {
         modalVisible.value = true;
@@ -249,7 +242,6 @@
         axios.delete("/ebook/" + id).then((response) => {
           const data = response.data; // data = commonResp
           if (data.success) {
-            // 重新加载列表
             handleQuery({
               page: pagination.value.current,
               size: pagination.value.pageSize,
@@ -263,7 +255,7 @@
       const level1 =  ref();
       let categorys: any;
       /**
-       * 查询所有分类
+       * Category Query
        **/
       const handleQueryCategory = () => {
         loading.value = true;
@@ -291,7 +283,7 @@
         let result = "";
         categorys.forEach((item: any) => {
           if (item.id === cid) {
-            // return item.name; // 注意，这里直接return不起作用
+            // return item.name; // return doesn't work here
             result = item.name;
           }
         });

@@ -9,7 +9,7 @@
         <a-menu-item key="welcome">
           <router-link :to="'/'">
           <MailOutlined />
-          <span>欢迎</span>
+          <span>Welcome</span>
           </router-link>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
@@ -94,7 +94,7 @@ export default defineComponent({
     const level1 =  ref();
     let categorys: any;
     /**
-     * 查询所有分类
+     * Category query
      **/
     const handleQueryCategory = () => {
       axios.get("/category").then((response) => {
@@ -102,7 +102,7 @@ export default defineComponent({
         if (data.success) {
           categorys = data.content;
 
-          // 加载完分类后，将侧边栏全部展开
+          // After loading the category, expand the sidebar
           // openKeys.value = [];
           // for (let i = 0; i < categorys.length; i++) {
           //   openKeys.value.push(categorys[i].id)
@@ -132,7 +132,6 @@ export default defineComponent({
     const isShowWelcome = ref(true);
     let category2Id = 0;
     const handleClick = (value: any) => {
-      console.log("menu click", value)
       if (value.key === 'welcome') {
         isShowWelcome.value = true;
       } else {
@@ -144,7 +143,6 @@ export default defineComponent({
 
     onMounted(() =>{
       handleQueryCategory();
-      // handleQueryEbook();
     });
     return{
       ebooks,
