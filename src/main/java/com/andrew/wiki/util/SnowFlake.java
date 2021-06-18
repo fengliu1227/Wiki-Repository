@@ -5,41 +5,41 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 
 /**
- * Twitter的分布式自增ID雪花算法
+ * Twitter's distributed self-increasing ID snowflake algorithm
  **/
 @Component
 public class SnowFlake {
 
     /**
-     * 起始的时间戳
+     * Starting timestamp
      */
     private final static long START_STMP = 1609459200000L; // 2021-01-01 00:00:00
 
     /**
-     * 每一部分占用的位数
+     * Number of bits occupied by each part
      */
-    private final static long SEQUENCE_BIT = 12; //序列号占用的位数
-    private final static long MACHINE_BIT = 5;   //机器标识占用的位数
-    private final static long DATACENTER_BIT = 5;//数据中心占用的位数
+    private final static long SEQUENCE_BIT = 12; //Number of digits occupied by the serial number
+    private final static long MACHINE_BIT = 5;//The number of digits occupied by the machine ID
+    private final static long DATACENTER_BIT = 5;//The number of bits occupied by the data center
 
     /**
-     * 每一部分的最大值
+     * Maximum value of each part
      */
     private final static long MAX_DATACENTER_NUM = -1L ^ (-1L << DATACENTER_BIT);
     private final static long MAX_MACHINE_NUM = -1L ^ (-1L << MACHINE_BIT);
     private final static long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BIT);
 
     /**
-     * 每一部分向左的位移
+     * Displacement of each part to the left
      */
     private final static long MACHINE_LEFT = SEQUENCE_BIT;
     private final static long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
     private final static long TIMESTMP_LEFT = DATACENTER_LEFT + DATACENTER_BIT;
 
-    private long datacenterId = 1;  //数据中心
-    private long machineId = 1;     //机器标识
-    private long sequence = 0L; //序列号
-    private long lastStmp = -1L;//上一次时间戳
+    private long datacenterId = 1;  //data center
+    private long machineId = 1;//Machine ID
+    private long sequence = 0L;//serial number
+    private long lastStmp = -1L;//Last time stamp
 
     public SnowFlake() {
     }
@@ -56,7 +56,8 @@ public class SnowFlake {
     }
 
     /**
-     * 产生下一个ID
+     *
+     * Generate the next ID
      *
      * @return
      */
@@ -67,23 +68,23 @@ public class SnowFlake {
         }
 
         if (currStmp == lastStmp) {
-            //相同毫秒内，序列号自增
+            //In the same millisecond, the serial number increases automatically
             sequence = (sequence + 1) & MAX_SEQUENCE;
-            //同一毫秒的序列数已经达到最大
+            //The number of sequences in the same millisecond has reached the maximum
             if (sequence == 0L) {
                 currStmp = getNextMill();
             }
         } else {
-            //不同毫秒内，序列号置为0
+            //In different milliseconds, the serial number is set to 0
             sequence = 0L;
         }
 
         lastStmp = currStmp;
 
-        return (currStmp - START_STMP) << TIMESTMP_LEFT //时间戳部分
-                | datacenterId << DATACENTER_LEFT       //数据中心部分
-                | machineId << MACHINE_LEFT             //机器标识部分
-                | sequence;                             //序列号部分
+        return (currStmp - START_STMP) << TIMESTMP_LEFT //Timestamp part
+                | datacenterId << DATACENTER_LEFT       //Data center part
+                | machineId << MACHINE_LEFT             //Machine identification part
+                | sequence;                             //Serial number part
     }
 
     private long getNextMill() {
@@ -99,7 +100,6 @@ public class SnowFlake {
     }
 
 //    public static void main(String[] args) throws ParseException {
-//        // 时间戳
 //        // System.out.println(System.currentTimeMillis());
 //        // System.out.println(new Date().getTime());
 //        //

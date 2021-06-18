@@ -8,11 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
- * 统一注解，解决前后端交互Long类型精度丢失的问题
- * 公众号：甲蛙全栈
- * 关联视频课程《Spring Boot + Vue3 前后端分离 实战wiki知识库系统》
- *   https://coding.imooc.com/class/474.html
- * 示例网站：http://wiki.courseimooc.com
+ *
+ * Solve the problem of the loss of precision of the Long type between front and back ends
+ *
  */
 @Configuration
 public class JacksonConfig {

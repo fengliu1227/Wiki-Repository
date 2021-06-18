@@ -14,6 +14,7 @@ import com.andrew.wiki.util.SnowFlake;
 import com.andrew.wiki.websocket.WebSocketServer;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -54,6 +55,9 @@ public class DocService {
     private EBookCustMapper eBookCustMapper;
 
     @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
     private SnowFlake snowFlake;
 
     public List<DocQueryResponse> getAll(){
@@ -75,9 +79,8 @@ public class DocService {
         List<Doc> list = docMapper.selectByExample(docExample);
 
         PageInfo<Doc> pageInfo = new PageInfo<>(list);
-        LOG.info("总行数：{}", pageInfo.getTotal());
-        LOG.info("总页数：{}", pageInfo.getPages());
-
+        LOG.info("size：{}", pageInfo.getTotal());
+        LOG.info("page nums：{}", pageInfo.getPages());
         List<DocQueryResponse> resList = CopyUtil.copyList(list, DocQueryResponse.class);
         PageResponse<DocQueryResponse> pageResponse = new PageResponse<>();
         pageResponse.setTotal(pageInfo.getTotal());
@@ -167,7 +170,8 @@ public class DocService {
 
         eBookCustMapper.increaseVoteCount(docDb.getEbookId());
         String logId = MDC.get("LOG_ID");
-        wsService.sendInfo(docDb.getName(), userDb.getName(), logId);
+//        wsService.sendInfo(docDb.getName(), userDb.getName(), logId);
+        rocketMQTemplate.convertAndSend("VOTE_TOPIC", docDb.getName() + " was Voted by " + userDb.getName());
         return docQueryResponse;
     }
 

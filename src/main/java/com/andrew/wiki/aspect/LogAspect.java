@@ -34,7 +34,7 @@ public class LogAspect {
 
     private final static Logger LOG = LoggerFactory.getLogger(LogAspect.class);
 
-    /** 定义一个切点 */
+    /** Define a pointcut */
     @Pointcut("execution(public * com.andrew.wiki.controller..*Controller.*(..))")
     public void controllerPointcut() {}
 
@@ -43,22 +43,21 @@ public class LogAspect {
     public void doBefore(JoinPoint joinPoint) throws Throwable {
 
         MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
-        // 开始打印请求日志
+        // Print Request log
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         Signature signature = joinPoint.getSignature();
         String name = signature.getName();
 
-        // 打印请求信息
+        // Print Request Info
         LOG.info("------------- 开始 -------------");
-        LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
-        LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
-        LOG.info("远程地址: {}", request.getRemoteAddr());
+        LOG.info("Request url: {} {}", request.getRequestURL().toString(), request.getMethod());
+        LOG.info("Controller: {}.{}", signature.getDeclaringTypeName(), name);
+        LOG.info("Remote url: {}", request.getRemoteAddr());
 
 
-        // 打印请求参数
+        // Print Request Params
         Object[] args = joinPoint.getArgs();
-		// LOG.info("请求参数: {}", JSONObject.toJSONString(args));
 
 		Object[] arguments  = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -69,25 +68,25 @@ public class LogAspect {
             }
             arguments[i] = args[i];
         }
-        // 排除字段，敏感字段或太长的字段不显示
+        // excludes some fields like password..
         String[] excludeProperties = {"password", "file"};
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
-        LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter));
+        LOG.info("Request Params: {}", JSONObject.toJSONString(arguments, excludefilter));
     }
 
     @Around("controllerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         Object result = proceedingJoinPoint.proceed();
-        // 排除字段，敏感字段或太长的字段不显示
+        // excludes some fields like password..
         String[] excludeProperties = {"password", "file"};
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
-        LOG.info("返回结果: {}", JSONObject.toJSONString(result, excludefilter));
-        LOG.info("------------- 结束 耗时：{} ms -------------", System.currentTimeMillis() - startTime);
+        LOG.info("Result: {}", JSONObject.toJSONString(result, excludefilter));
+        LOG.info("------------- End; time consuming：{} ms -------------", System.currentTimeMillis() - startTime);
         return result;
     }
 }

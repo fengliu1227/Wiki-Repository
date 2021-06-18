@@ -18,7 +18,7 @@
 //
 //     @Override
 //     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-//         // 打印请求信息
+//         //Print request information
 //         HttpServletRequest request = (HttpServletRequest) servletRequest;
 //         LOG.info("------------- LogFilter Start -------------");
 //         LOG.info("requested url: {} {}", request.getRequestURL().toString(), request.getMethod());

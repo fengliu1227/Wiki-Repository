@@ -56,8 +56,8 @@ public class UserService {
         List<User> list = userMapper.selectByExample(userExample);
 
         PageInfo<User> pageInfo = new PageInfo<>(list);
-        LOG.info("总行数：{}", pageInfo.getTotal());
-        LOG.info("总页数：{}", pageInfo.getPages());
+        LOG.info("size：{}", pageInfo.getTotal());
+        LOG.info("page nums：{}", pageInfo.getPages());
 
         List<UserQueryResponse> resList = CopyUtil.copyList(list, UserQueryResponse.class);
         PageResponse<UserQueryResponse> pageResponse = new PageResponse<>();

@@ -49,8 +49,8 @@ public class CategoryService {
         List<Category> list = categoryMapper.selectByExample(categoryExample);
 
         PageInfo<Category> pageInfo = new PageInfo<>(list);
-        LOG.info("总行数：{}", pageInfo.getTotal());
-        LOG.info("总页数：{}", pageInfo.getPages());
+        LOG.info("size：{}", pageInfo.getTotal());
+        LOG.info("page nums：{}", pageInfo.getPages());
 
         List<CategoryQueryResponse> resList = CopyUtil.copyList(list, CategoryQueryResponse.class);
         PageResponse<CategoryQueryResponse> pageResponse = new PageResponse<>();

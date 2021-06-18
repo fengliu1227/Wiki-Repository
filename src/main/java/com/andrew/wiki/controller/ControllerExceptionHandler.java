@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 统一异常处理、数据预处理等
+ * Unified exception handling, data preprocessing, etc.
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -19,7 +19,7 @@ public class ControllerExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     /**
-     * 校验异常统一处理
+     * Unified processing of verification exceptions
      * @param e
      * @return
      */
@@ -27,39 +27,31 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public CommonResponse validExceptionHandler(BindException e) {
         CommonResponse commonResponse = new CommonResponse();
-        LOG.warn("参数校验失败：{}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        LOG.warn("Parameter verification failed：{}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         commonResponse.setSuccess(false);
         commonResponse.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return commonResponse;
     }
 
-    /**
-     * 校验异常统一处理
-     * @param e
-     * @return
-     */
+
     @ExceptionHandler(value = BusinessException.class)
     @ResponseBody
     public CommonResponse validExceptionHandler(BusinessException e) {
         CommonResponse commonResponse = new CommonResponse();
-        LOG.warn("业务异常：{}", e.getCode().getDesc());
+        LOG.warn("Business exception：{}", e.getCode().getDesc());
         commonResponse.setSuccess(false);
         commonResponse.setMessage(e.getCode().getDesc());
         return commonResponse;
     }
 
-    /**
-     * 校验异常统一处理
-     * @param e
-     * @return
-     */
+
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public CommonResponse validExceptionHandler(Exception e) {
         CommonResponse commonResponse = new CommonResponse();
-        LOG.error("系统异常：", e);
+        LOG.error("System Exception：", e);
         commonResponse.setSuccess(false);
-        commonResponse.setMessage("系统出现异常，请联系管理员");
+        commonResponse.setMessage("The system has exception, please contact the administrator");
         return commonResponse;
     }
 }

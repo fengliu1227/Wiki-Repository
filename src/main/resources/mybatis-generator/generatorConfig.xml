@@ -6,17 +6,18 @@
 <generatorConfiguration>
     <context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">
 
-        <!-- 自动检查关键字，为关键字增加反引号 -->
+        <!-- Automatically check keywords and add backquotes to keywords -->
         <property name="autoDelimitKeywords" value="true"/>
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
 
-        <!--覆盖生成XML文件-->
+
+<!--        Overwrite the generated XML file-->
         <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
         <!-- 生成的实体类添加toString()方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
-        <!-- 不生成注释 -->
+        <!-- Do not generate comments -->
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
@@ -27,15 +28,15 @@
                         password="123456">
         </jdbcConnection>
 
-        <!-- domain类的位置 -->
+        <!-- domain location -->
         <javaModelGenerator targetProject="src/main/java"
                             targetPackage="com.andrew.wiki.domain"/>
 
-        <!-- mapper xml的位置 -->
+        <!-- mapper location -->
         <sqlMapGenerator targetProject="src/main/resources"
                          targetPackage="mapper"/>
 
-        <!-- mapper类的位置 -->
+        <!-- mapper location -->
         <javaClientGenerator targetProject="src/main/java"
                              targetPackage="com.andrew.wiki.mapper"
                              type="XMLMAPPER"/>

@@ -44,8 +44,8 @@ public class EBookService {
         List<EBook> list = eBookMapper.selectByExample(eBookExample);
 
         PageInfo<EBook> pageInfo = new PageInfo<>(list);
-        LOG.info("总行数：{}", pageInfo.getTotal());
-        LOG.info("总页数：{}", pageInfo.getPages());
+        LOG.info("size：{}", pageInfo.getTotal());
+        LOG.info("page nums：{}", pageInfo.getPages());
 
         List<EBookQueryResponse> resList = CopyUtil.copyList(list, EBookQueryResponse.class);
         PageResponse<EBookQueryResponse> pageResponse = new PageResponse<>();

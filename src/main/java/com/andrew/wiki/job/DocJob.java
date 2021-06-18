@@ -22,11 +22,11 @@ public class DocJob {
     private SnowFlake snowFlake;
 
     /**
-     * 每30秒更新电子书信息
+     * 00:00:00 per day => update EBook info
      */
-    @Scheduled(cron = "5/30 * * * * ?")
+    @Scheduled(cron = "0 0 00 * * ? ")
     public void cron() {
-        // 增加日志流水号
+        //Increase log serial number
         MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
         LOG.info("update t_Ebook data start");
         long start = System.currentTimeMillis();
