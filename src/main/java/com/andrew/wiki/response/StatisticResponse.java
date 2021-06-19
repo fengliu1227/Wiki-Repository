@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class StatisticResponse {
 
-    @JsonFormat(pattern="MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern="MM-dd", timezone = "GMT-4")
     private Date date;
 
     private int viewCount;

@@ -21,7 +21,6 @@ set t1.view_increase = t1.view_count - ifnull(t2.view_count, 0), t1.vote_increas
 where t1.date = curdate();
     </update>
 
-    <!-- 获取首页数值数据：总阅读数、总点赞数、今日阅读数、今日点赞数、今日预计阅读数、今日预计阅读增长 -->
     <select id="getStatistic" resultType="com.andrew.wiki.response.StatisticResponse">
         select
             t1.`date` as `date`,

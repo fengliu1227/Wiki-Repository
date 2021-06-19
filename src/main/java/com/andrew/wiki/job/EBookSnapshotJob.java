@@ -21,9 +21,9 @@ public class EBookSnapshotJob {
     private SnowFlake snowFlake;
 
     /**
-     * 00:00:00 per day => update eBookSnapshot
+     * 0, 6, 12, 18 o'clock, six hours per day => update eBookSnapshot
      */
-    @Scheduled(cron = "0 0 00 * * ? ")
+    @Scheduled(cron = "0 0 0,6,12,18 * * ? ")
     public void cron() {
         //Increase log serial number
         MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));

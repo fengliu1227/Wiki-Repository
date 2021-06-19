@@ -13,11 +13,14 @@ create table `t_ebook`
     primary key (`id`)
 ) engine=innodb default charset=utf8mb4;
 
-insert into `t_ebook` (id, name, description) values(1, 'spring boot入门教程', '零基础入门java开发，企业级应用开发最佳框架');
-insert into `t_ebook` (id, name, description) values(2, 'Vue入门教程', '零基础入门前端开发，企业级应用开发最佳框架');
-insert into `t_ebook` (id, name, description) values (3, 'Python 入门教程', '零基础入门 Python 开发，企业级应用开发最佳首选框架');
-insert into `t_ebook` (id, name, description) values (4, 'Mysql 入门教程', '零基础入门 Mysql 开发，企业级应用开发最佳首选框架');
-insert into `t_ebook` (id, name, description) values (5, 'Oracle 入门教程', '零基础入门 Oracle 开发，企业级应用开发最佳首选框架');
+insert into `t_ebook` (id, name, description) values(1, 'spring boot', 'Spring Boot makes it easy to create stand-alone that you can "just run".');
+insert into `t_ebook` (id, name, description) values(2, 'Vue', 'The Progressive JavaScript Framework');
+insert into `t_ebook` (id, name, description) values (3, 'Spring', 'The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications');
+insert into `t_ebook` (id, name, description) values (4, 'SpringMVC', 'The Spring Web MVC framework provides Model-View-Controller (MVC) architecture');
+insert into `t_ebook` (id, name, description) values (5, 'Mysql', 'MySQL is an open-source relational database management system (RDBMS)');
+insert into `t_ebook` (id, name, description) values (6, 'Java Core', 'Java is at the heart of our digital lifestyle.');
+insert into `t_ebook` (id, name, description) values (7, 'Mybatis', 'MyBatis is a first class persistence framework with support for custom SQL, stored procedures and advanced mappings.');
+insert into `t_ebook` (id, name, description) values (8, 'Javascript', 'JavaScript is the programming language of the Web');
 
 # category schema
 drop table if exists `t_category`;
@@ -29,20 +32,20 @@ create table `t_category` (
                             primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='category';
 
-insert into `t_category` (id, parent, name, sort) values (100, 000, '前端开发', 100);
+insert into `t_category` (id, parent, name, sort) values (100, 000, 'Front End', 100);
 insert into `t_category` (id, parent, name, sort) values (101, 100, 'Vue', 101);
-insert into `t_category` (id, parent, name, sort) values (102, 100, 'HTML & CSS', 102);
+insert into `t_category` (id, parent, name, sort) values (102, 100, 'JS', 102);
+insert into `t_category` (id, parent, name, sort) values (103, 100, 'HTML', 103);
+insert into `t_category` (id, parent, name, sort) values (104, 100, 'CSS', 104);
+insert into `t_category` (id, parent, name, sort) values (105, 100, 'echart.js', 105);
 insert into `t_category` (id, parent, name, sort) values (200, 000, 'Java', 200);
-insert into `t_category` (id, parent, name, sort) values (201, 200, '基础应用', 201);
-insert into `t_category` (id, parent, name, sort) values (202, 200, '框架应用', 202);
-insert into `t_category` (id, parent, name, sort) values (300, 000, 'Python', 300);
-insert into `t_category` (id, parent, name, sort) values (301, 300, '基础应用', 301);
-insert into `t_category` (id, parent, name, sort) values (302, 300, '进阶方向应用', 302);
-insert into `t_category` (id, parent, name, sort) values (400, 000, '数据库', 400);
+insert into `t_category` (id, parent, name, sort) values (201, 200, 'Java Core', 201);
+insert into `t_category` (id, parent, name, sort) values (202, 200, 'FrameWork', 202);
+insert into `t_category` (id, parent, name, sort) values (400, 000, 'DataBase', 400);
 insert into `t_category` (id, parent, name, sort) values (401, 400, 'MySQL', 401);
-insert into `t_category` (id, parent, name, sort) values (500, 000, '其它', 500);
-insert into `t_category` (id, parent, name, sort) values (501, 500, '服务器', 501);
-insert into `t_category` (id, parent, name, sort) values (502, 500, '开发工具', 502);
+insert into `t_category` (id, parent, name, sort) values (500, 000, 'Middleware', 500);
+insert into `t_category` (id, parent, name, sort) values (501, 500, 'RocketMQ', 501);
+insert into `t_category` (id, parent, name, sort) values (502, 500, 'Redis', 502);
 
 -- doc schema
 drop table if exists `t_doc`;
@@ -55,14 +58,14 @@ create table `t_doc` (
                        `view_count` int default 0 comment 'view_count',
                        `vote_count` int default 0 comment 'vote_count',
                        primary key (`id`)
-) engine=innodb default charset=utf8mb4 comment='文档';
+) engine=innodb default charset=utf8mb4 comment='Content';
 
-insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (1, 1, 0, '文档1', 1, 0, 0);
-insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (2, 1, 1, '文档1.1', 1, 0, 0);
-insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (3, 1, 0, '文档2', 2, 0, 0);
-insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (4, 1, 3, '文档2.1', 1, 0, 0);
-insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (5, 1, 3, '文档2.2', 2, 0, 0);
-insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, '文档2.2.1', 1, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (1, 1, 0, 'Ch. 1', 1, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (2, 1, 1, 'Sect. 1.1', 1, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (3, 1, 0, 'Ch. 2', 2, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (4, 1, 3, 'Sect. 2.1', 1, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (5, 1, 3, 'Sect. 2.2', 2, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, 'Sect. 2.1.1', 1, 0, 0);
 
 -- content schema
 drop table if exists `t_content`;

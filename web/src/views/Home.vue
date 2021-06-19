@@ -27,7 +27,7 @@
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <div class="All" v-show="isShowWelcome">
-        <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks" :pagination="pagination" @change="handleTableChange">
+        <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :pagination="pagination" :data-source="ebooks">
           <template #renderItem="{ item }">
             <a-list-item key="item.name">
               <template #actions>
@@ -122,10 +122,17 @@ export default defineComponent({
     const level1 =  ref();
 
     const pagination = ref({
+      onChange: (page: number) => {
+        handleQuery({
+          page: page,
+          size: pagination.value.pageSize,
+        });
+      },
       current: 1,
-      pageSize: 5,
+      pageSize: 12,
       total: 0
     });
+
     let categorys: any;
     /**
      * Category query
@@ -165,6 +172,7 @@ export default defineComponent({
 
 
     const handleQuery = (params: any) => {
+      console.log("==========================", params);
       axios.get("/ebook/list", {
         params:{
           page: params.page,
@@ -183,12 +191,6 @@ export default defineComponent({
       });
     };
 
-    const handleTableChange = (pagination: any) => {
-      handleQuery({
-        page: pagination.current,
-        size: pagination.pageSize
-      });
-    };
 
     const isShowWelcome = ref(true);
     let category2Id = 0;
@@ -204,7 +206,7 @@ export default defineComponent({
 
     onMounted(() =>{
       handleQueryCategory();
-      handleQuery({page: 1, size: 50});
+      handleQuery({page: 1, size: 500});
     });
     return{
       ebooks,
@@ -217,7 +219,6 @@ export default defineComponent({
       level1,
       isShowWelcome,
       pagination,
-      handleTableChange
     }
   }
 });

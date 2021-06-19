@@ -19,7 +19,7 @@ public class EBookSnapshotService {
     }
 
     /**
-     * 获取首页数值数据：总阅读数、总点赞数、今日阅读数、今日点赞数、今日预计阅读数、今日预计阅读增长
+     * Get the numerical data of the homepage: total readings, total likes, readings today, likes today, estimated readings today, estimated reading growth
      */
     public List<StatisticResponse> getStatistic() {
         List<StatisticResponse> list = eBookSnapshotcustMapper.getStatistic();
@@ -28,7 +28,7 @@ public class EBookSnapshotService {
     }
 
     /**
-     * 30天数值统计
+     * 30-day numerical statistics
      */
     public List<StatisticResponse> get30Statistic() {
         return eBookSnapshotcustMapper.get30Statistic();
