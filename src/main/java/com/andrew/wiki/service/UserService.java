@@ -4,11 +4,10 @@ import com.andrew.wiki.domain.User;
 import com.andrew.wiki.domain.UserExample;
 import com.andrew.wiki.exception.BusinessException;
 import com.andrew.wiki.exception.BusinessExceptionCode;
+import com.andrew.wiki.mapper.RoleMapper;
 import com.andrew.wiki.mapper.UserMapper;
-import com.andrew.wiki.request.UserLoginRequest;
-import com.andrew.wiki.request.UserQueryRequest;
-import com.andrew.wiki.request.UserSaveRequest;
-import com.andrew.wiki.request.UserSetPassRequest;
+import com.andrew.wiki.request.*;
+import com.andrew.wiki.response.RoleResponse;
 import com.andrew.wiki.response.UserLoginResponse;
 import com.andrew.wiki.response.UserQueryResponse;
 import com.andrew.wiki.response.PageResponse;
@@ -32,6 +31,9 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private SnowFlake snowFlake;
@@ -121,5 +123,21 @@ public class UserService {
                 throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
             }
         }
+    }
+
+    public void setRole(UserSetRoleRequest req){
+        User userDb = userMapper.selectByPrimaryKey(req.getId());
+        List<RoleResponse> all = roleService.getAll();
+        boolean contained = false;
+        for(RoleResponse r: all){
+            if(r.getRole().equals(req.getRole())){
+                contained = true;
+            }
+        }
+        if(!contained){
+            throw new BusinessException(BusinessExceptionCode.NO_SUCH_ROLE);
+        }
+        userDb.setRole(req.getRole());
+        userMapper.updateByPrimaryKey(userDb);
     }
 }

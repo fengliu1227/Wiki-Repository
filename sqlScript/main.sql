@@ -112,3 +112,15 @@ create table `t_ebook_snapshot` (
                                   primary key (`id`),
                                   unique key `ebook_id_date_unique` (`ebook_id`, `date`)
 ) engine=innodb default charset=utf8mb4 comment='ebook_snapshot';
+
+-- role schema
+drop table if exists `t_role`;
+create table `t_role` (
+                                    `id` bigint auto_increment not null comment 'id',
+                                    `role` char(32) not null comment 'Role',
+                                    primary key (`id`),
+                                    unique key `role_unique` (`role`)
+) engine=innodb default charset=utf8mb4 comment='ebook_snapshot';
+
+insert into `t_role` (id, `role` ) values (1, 'ROLE_USER');
+insert into `t_role` (id, `role` ) values (2, 'ROLE_ADMIN');

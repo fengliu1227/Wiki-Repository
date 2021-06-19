@@ -6,6 +6,7 @@ public enum BusinessExceptionCode {
     LOGIN_USER_ERROR("Login Name or Password incorrect"),
     VOTE_REPEAT("You Already Voted It"),
     UNEXISTED_USER("This User Doesn't Exist"),
+    NO_SUCH_ROLE("No This Role")
     ;
 
     private String desc;

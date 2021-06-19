@@ -122,9 +122,30 @@
 
 
             // login
-            const login = (givenUser: any) => {
+            const login = () => {
+                loginModalLoading.value = true;
+                loginUser.value.password = hexMd5(loginUser.value.password);
+                if(Tool.isNotEmpty(loginUser)){
+                    axios.post('/user/login', loginUser.value).then((response) => {
+                        loginModalLoading.value = false;
+                        const data = response.data;
+                        if (data.success) {
+                            loginModalVisible.value = false;
+                            message.success("Login successfully！");
+
+                            store.commit("setUser", data.content);
+                        } else {
+                            message.error(data.message);
+                        }
+                    });
+                }
+            };
+
+            // login
+            const login2 = (givenUser: any) => {
+                loginModalLoading.value = true;
+                givenUser.value.password = hexMd5(givenUser.value.password);
                 if(Tool.isNotEmpty(givenUser)){
-                    console.log("=============11111111");
                     axios.post('/user/login', givenUser.value).then((response) => {
                         loginModalLoading.value = false;
                         const data = response.data;
@@ -138,26 +159,13 @@
                         }
                     });
                 }
-                loginModalLoading.value = true;
-                loginUser.value.password = hexMd5(loginUser.value.password);
-                axios.post('/user/login', loginUser.value).then((response) => {
-                    loginModalLoading.value = false;
-                    const data = response.data;
-                    if (data.success) {
-                        loginModalVisible.value = false;
-                        message.success("Login successfully！");
-
-                        store.commit("setUser", data.content);
-                    } else {
-                        message.error(data.message);
-                    }
-                });
             };
 
             // logout
             const logout = () => {
                 axios.post('/user/logout/' + user.value.token).then((response) => {
                     const data = response.data;
+                    console.log("=============", data);
                     if (data.success) {
                         message.success("Log out successfully！！");
                         store.commit("setUser", {});
@@ -170,9 +178,8 @@
             //register
 
             const register = () => {
-                console.log("===========", RegisterUser.value);
-                console.log("===========", loginUser.value);
                 registerModalLoading.value = true;
+                const registerPass = RegisterUser.value.password;
                 RegisterUser.value.password = hexMd5(RegisterUser.value.password );
                     axios.post("/user", RegisterUser.value).then((response) =>{
                         registerModalLoading.value = false;
@@ -180,7 +187,8 @@
                         if (data.success) {
 
                             //login
-                            login(RegisterUser);
+                            RegisterUser.value.password = registerPass;
+                            login2(RegisterUser);
                             registerModalVisible.value = false;
                         }else {
                             message.error(data.message);

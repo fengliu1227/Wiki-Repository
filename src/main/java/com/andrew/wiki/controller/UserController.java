@@ -1,14 +1,10 @@
 package com.andrew.wiki.controller;
 
-import com.andrew.wiki.request.UserLoginRequest;
-import com.andrew.wiki.request.UserQueryRequest;
-import com.andrew.wiki.request.UserSaveRequest;
-import com.andrew.wiki.request.UserSetPassRequest;
+import com.andrew.wiki.request.*;
 import com.andrew.wiki.response.UserLoginResponse;
 import com.andrew.wiki.response.UserQueryResponse;
 import com.andrew.wiki.response.CommonResponse;
 import com.andrew.wiki.response.PageResponse;
-import com.andrew.wiki.service.UserService;
 import com.andrew.wiki.service.UserService;
 import com.andrew.wiki.util.SnowFlake;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +91,14 @@ public class UserController {
     public CommonResponse logout(@PathVariable("token")String token){
         CommonResponse commonResponse = new CommonResponse();
         redisTemplate.delete(token);
+        return commonResponse;
+    }
+
+    @PutMapping("/user/role")
+    public CommonResponse setRole(@RequestBody @Valid UserSetRoleRequest req){
+        CommonResponse commonResponse = new CommonResponse();
+        System.out.println("============" + req);
+        userService.setRole(req);
         return commonResponse;
     }
 }

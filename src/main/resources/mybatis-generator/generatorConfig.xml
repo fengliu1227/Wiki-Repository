@@ -46,6 +46,7 @@
 <!--        <table tableName="t_user" domainObjectName="User"/>-->
 <!--        <table tableName="t_content" domainObjectName="Content"/>-->
 <!--        <table tableName="t_user2vote" domainObjectName="User2Vote"/>-->
-        <table tableName="t_ebook_snapshot" domainObjectName="EBookSnapshot"/>
+<!--        <table tableName="t_ebook_snapshot" domainObjectName="EBookSnapshot"/>-->
+                <table tableName="t_role" domainObjectName="Role"/>
     </context>
 </generatorConfiguration>

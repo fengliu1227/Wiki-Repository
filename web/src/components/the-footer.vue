@@ -48,6 +48,7 @@
                 if ('WebSocket' in window) {
                     token = Tool.uuid(10);
                     // url：ws://127.0.0.1:8880/ws/xxx
+                    console.log("========================" + token);
                     websocket = new WebSocket(process.env.VUE_APP_WS_SERVER + '/ws/' + token);
                     initWebSocket()
 

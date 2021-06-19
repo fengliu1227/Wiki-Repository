@@ -31,6 +31,9 @@
       >
         <template v-slot:action="{ text, record }">
           <a-space size="small">
+            <a-button type="primary" @click="setRole(record)">
+              Role Mgmt.
+            </a-button>
             <a-button type="primary" @click="resetPassword(record)">
               reset password
             </a-button>
@@ -79,10 +82,39 @@
           @ok="handleResetModalOk"
   >
     <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+
       <a-form-item label="new password">
-        <a-input v-model:value="user.password" type="password"/>
+          <a-input v-model:value="user.password" type="password"/>
       </a-form-item>
     </a-form>
+  </a-modal>
+
+  <a-modal
+          title="Role Management"
+          v-model:visible="roleModalVisible"
+          :confirm-loading="roleModalLoading"
+          @ok="handleRoleModalOk"
+  >
+    <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="update role">
+        <a-input v-model:value="user.role"/>
+        {{user.role}}
+      </a-form-item>
+      <a-form-item label="update role">
+        <a-select
+                v-model:value="user.role"
+                ref="select"
+        >
+          <a-select-option :value="0">
+            None
+          </a-select-option>
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
+            {{c.name}}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+    </a-form>
+
   </a-modal>
 </template>
 
@@ -202,6 +234,15 @@
           });
         }
       };
+      const roleModalVisible = ref(false);
+      /**
+       * Set Role
+       */
+      const setRole = (record: any) => {
+        roleModalVisible.value = true;
+        console.log("====", record);
+        user.value = Tool.copy(record);
+      };
 
       /**
        * edit
@@ -294,7 +335,9 @@
         resetModalVisible,
         resetModalLoading,
         handleResetModalOk,
-        resetPassword
+        resetPassword,
+        setRole,
+        roleModalVisible
       }
     }
   });
