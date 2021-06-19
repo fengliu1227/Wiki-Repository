@@ -61,7 +61,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/admin/statistics',
     name: 'AdminStatistics',
-    component:AdminStatistics
+    component:AdminStatistics,
+    meta: {
+      loginRequire: true
+    }
   }
 ]
 const router = createRouter({

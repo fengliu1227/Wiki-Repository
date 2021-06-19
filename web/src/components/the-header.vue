@@ -1,6 +1,5 @@
 <template>
     <a-layout-header class="header">
-        <div class="logo">AAA</div>
         <a-menu
                 theme="dark"
                 mode="horizontal"
@@ -8,9 +7,6 @@
         >
             <a-menu-item key="/">
                 <router-link to="/">Home</router-link>
-            </a-menu-item>
-            <a-menu-item key="/admin/statistics">
-                <router-link to="/admin/statistics">statistics</router-link>
             </a-menu-item>
             <a-menu-item key="/admin/user" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
                 <router-link to="/admin/user">User mgmt</router-link>
@@ -21,7 +17,7 @@
             <a-menu-item key="/admin/category" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
                 <router-link to="/admin/category">Category mgmt</router-link>
             </a-menu-item>
-            <a-menu-item key="/admin/statistics">
+            <a-menu-item key="/admin/statistics" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
                 <router-link to="/admin/statistics">statistics</router-link>
             </a-menu-item>
                 <a-popconfirm
@@ -212,16 +208,6 @@
 </script>
 
 <style>
-    .logo {
-        width: 120px;
-        height: 31px;
-        /*background: rgba(255, 255, 255, 0.2);*/
-        /*margin: 16px 28px 16px 0;*/
-        float: left;
-        color: white;
-        font-size: 18px;
-    }
-
     .login-menu {
         float: right;
         color: white;

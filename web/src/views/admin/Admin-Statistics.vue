@@ -99,6 +99,7 @@
 <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue'
   import axios from 'axios';
+  import { Chart } from 'chart.js';
 
   declare let echarts: any;
 
@@ -145,13 +146,13 @@
       };
 
       const init30DayEcharts = (list: any) => {
-        // 发布生产后出现问题：切到别的页面，再切回首页，报表显示不出来
-        // 解决方法：把原来的id=main的区域清空，重新初始化
+        // Problems occurred after release production: switch to another page, then switch back to the home page, the report is not displayed
+        // Solution: Clear the original id=main area and reinitialize it
         const mainDom = document.getElementById('main-col');
         if (mainDom) {
           mainDom.innerHTML = '<div id="main" style="width: 100%;height:300px;"></div>';
         }
-        // 基于准备好的dom，初始化echarts实例
+        //Based on the prepared dom, initialize the echarts instance
         const myChart = echarts.init(document.getElementById('main'));
 
         const xAxis = [];
@@ -164,16 +165,16 @@
           seriesVote.push(record.voteIncrease);
         }
 
-        // 指定图表的配置项和数据
+        // Specify the configuration items and data of the chart
         const option = {
           title: {
-            text: '30天趋势图'
+            text: '30-day trend chart'
           },
           tooltip: {
             trigger: 'axis'
           },
           legend: {
-            data: ['总阅读量', '总点赞量']
+            data: ['Total view', 'Total vote']
           },
           grid: {
             left: '1%',
@@ -196,23 +197,21 @@
           },
           series: [
             {
-              name: '总阅读量',
+              name: 'Total view',
               type: 'line',
-              // stack: '总量', 不堆叠
               data: seriesView,
               smooth: true
             },
             {
-              name: '总点赞量',
+              name: 'Total vote',
               type: 'line',
-              // stack: '总量', 不堆叠
               data: seriesVote,
               smooth: true
             }
           ]
         };
 
-        // 使用刚指定的配置项和数据显示图表。
+        //Display the chart using the configuration items and data just specified.
         myChart.setOption(option);
       };
 
@@ -221,43 +220,17 @@
           const data = response.data;
           if (data.success) {
             const statisticList = data.content;
+            console.log("============", statisticList);
 
             init30DayEcharts(statisticList)
           }
         });
       };
 
-      // const testEcharts = () => {
-      //   // 基于准备好的dom，初始化echarts实例
-      //   const myChart = echarts.init(document.getElementById('main'));
-      //
-      //   // 指定图表的配置项和数据
-      //   const option = {
-      //     title: {
-      //       text: 'ECharts 入门示例'
-      //     },
-      //     tooltip: {},
-      //     legend: {
-      //       data:['销量']
-      //     },
-      //     xAxis: {
-      //       data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-      //     },
-      //     yAxis: {},
-      //     series: [{
-      //       name: '销量',
-      //       type: 'bar',
-      //       data: [5, 20, 36, 10, 10, 20]
-      //     }]
-      //   };
-      //
-      //   // 使用刚指定的配置项和数据显示图表。
-      //   myChart.setOption(option);
-      // };
+
 
       onMounted(() => {
         getStatistic();
-        // testEcharts();
         get30DayStatistic();
       });
 
@@ -267,6 +240,7 @@
     }
   });
 </script>
+
 <style scoped>
   .tip {
     padding: 10px 5px;

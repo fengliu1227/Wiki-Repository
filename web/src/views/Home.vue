@@ -6,10 +6,10 @@
               :style="{ height: '100%', borderRight: 0 }"
               @click="handleClick"
       >
-        <a-menu-item key="welcome">
+        <a-menu-item key="All">
           <router-link :to="'/'">
           <MailOutlined />
-          <span>Welcome</span>
+          <span>All Ebooks</span>
           </router-link>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
@@ -26,8 +26,36 @@
     <a-layout-content
             :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <div class="welcome" v-show="isShowWelcome">
-        <h1>Weclome to Andrew's wiki repository</h1>
+      <div class="All" v-show="isShowWelcome">
+        <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks" :pagination="pagination" @change="handleTableChange">
+          <template #renderItem="{ item }">
+            <a-list-item key="item.name">
+              <template #actions>
+              <span>
+                <component v-bind:is="'FileOutlined'" style="margin-right: 8px" />
+                {{ item.docCount }}
+              </span>
+                <span>
+                <component v-bind:is="'UserOutlined'" style="margin-right: 8px" />
+                {{ item.viewCount }}
+              </span>
+                <span>
+                <component v-bind:is="'LikeOutlined'" style="margin-right: 8px" />
+                  {{ item.voteCount }}
+              </span>
+              </template>
+              <a-list-item-meta :description="item.description">
+                <template #title>
+                  <router-link :to="'/doc?ebookId=' + item.id">
+                    {{ item.name }}
+                  </router-link>
+                </template>
+                <template #avatar><a-avatar :src="item.cover" shape="square" :size="50"/></template>
+              </a-list-item-meta>
+
+            </a-list-item>
+          </template>
+        </a-list>
       </div>
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{gutter: 20, column: 3}" :data-source="ebooks">
 
@@ -92,6 +120,12 @@ export default defineComponent({
     // const openKeys =  ref();
 
     const level1 =  ref();
+
+    const pagination = ref({
+      current: 1,
+      pageSize: 5,
+      total: 0
+    });
     let categorys: any;
     /**
      * Category query
@@ -129,10 +163,37 @@ export default defineComponent({
       });
     };
 
+
+    const handleQuery = (params: any) => {
+      axios.get("/ebook/list", {
+        params:{
+          page: params.page,
+          size: params.size,
+        }
+      }).then((response) => {
+        const data = response.data;
+        if(data.success){
+          ebooks.value = data.content.list;
+          pagination.value.current = params.page;
+          pagination.value.total = data.content.total;
+        }else{
+          message.error(data.message);
+        }
+
+      });
+    };
+
+    const handleTableChange = (pagination: any) => {
+      handleQuery({
+        page: pagination.current,
+        size: pagination.pageSize
+      });
+    };
+
     const isShowWelcome = ref(true);
     let category2Id = 0;
     const handleClick = (value: any) => {
-      if (value.key === 'welcome') {
+      if (value.key === 'All') {
         isShowWelcome.value = true;
       } else {
         category2Id = value.key;
@@ -143,6 +204,7 @@ export default defineComponent({
 
     onMounted(() =>{
       handleQueryCategory();
+      handleQuery({page: 1, size: 50});
     });
     return{
       ebooks,
@@ -154,6 +216,8 @@ export default defineComponent({
       handleClick,
       level1,
       isShowWelcome,
+      pagination,
+      handleTableChange
     }
   }
 });
