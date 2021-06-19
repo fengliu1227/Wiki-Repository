@@ -6,6 +6,7 @@ import AdminEbook from '../views/admin/Admin-Ebook.vue'
 import AdminCategory from '../views/admin/Admin-Category.vue'
 import AdminDoc from '../views/admin/Admin-Doc.vue'
 import Doc from '../views/doc.vue'
+import AdminStatistics from '../views/admin/Admin-Statistics.vue'
 import {Tool} from "@/util/tool";
 import store from "@/store";
 
@@ -56,6 +57,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/doc',
     name: 'Doc',
     component:Doc
+  },
+  {
+    path: '/admin/statistics',
+    name: 'AdminStatistics',
+    component:AdminStatistics
   }
 ]
 const router = createRouter({

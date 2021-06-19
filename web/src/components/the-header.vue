@@ -9,6 +9,9 @@
             <a-menu-item key="/">
                 <router-link to="/">Home</router-link>
             </a-menu-item>
+            <a-menu-item key="/admin/statistics">
+                <router-link to="/admin/statistics">statistics</router-link>
+            </a-menu-item>
             <a-menu-item key="/admin/user" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
                 <router-link to="/admin/user">User mgmt</router-link>
             </a-menu-item>
@@ -17,6 +20,9 @@
             </a-menu-item>
             <a-menu-item key="/admin/category" :style="user.role === 'ROLE_ADMIN'? {} : {display:'none'}">
                 <router-link to="/admin/category">Category mgmt</router-link>
+            </a-menu-item>
+            <a-menu-item key="/admin/statistics">
+                <router-link to="/admin/statistics">statistics</router-link>
             </a-menu-item>
                 <a-popconfirm
                         title="Are you sure to log out?"

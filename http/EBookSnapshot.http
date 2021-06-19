@@ -1,0 +1,4 @@
+GET http://localhost:8080/statistic
+
+###
+GET http://localhost:8080/statistic/month
