@@ -9,18 +9,18 @@ Vue 3.0, Vue Cli&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=>  develop the frontend<br>
 RocketMQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=>  Decouple the spring boot aplication and the message function<br>
 spring, Spring boot&nbsp;=>  never felt so easy to develop a web application before<br>
 
-## technology stack
+## Technology Stack
 
 
-### backend: 
+### Backend: 
 Spring, Spring Boot, Mybatis, Mysql, lombok(easy for getter and setter, etc.)<br/>
-### frontend: 
+### Frontend: 
 Vue 3.0, Vue ClI, Ant Design Vue, axios (data interaction between backend and frontend), wangeditor(Rich text editor)<br/>
-### middleware: 
+### Middleware: 
 redis(store token), RocketMQ(send message for all user)<br/>
 
 
-## how to use:
+## How to use:
 1. Configure database information in src/main/source/application.properties.<br/>
 2. Configure the websocket and backend url in web/.env.dev or web/.env.prod/<br/>
 3. Make sure you created Schema named wiki.<br/>
@@ -43,7 +43,7 @@ sh bin/mqshutdown namesrv // stop server
     vue-cli-service serve --mode prod // run in production environment
 ````
 
-## user information:
+## User information:
 ### Role: User
 Login name: user1<br/>
 PassWord: user<br/>
