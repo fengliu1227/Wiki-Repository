@@ -13,14 +13,15 @@ create table `t_ebook`
     primary key (`id`)
 ) engine=innodb default charset=utf8mb4;
 
-insert into `t_ebook` (id, name, description) values(1, 'spring boot', 'Spring Boot makes it easy to create stand-alone that you can "just run".');
-insert into `t_ebook` (id, name, description) values(2, 'Vue', 'The Progressive JavaScript Framework');
-insert into `t_ebook` (id, name, description) values (3, 'Spring', 'The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications');
-insert into `t_ebook` (id, name, description) values (4, 'SpringMVC', 'The Spring Web MVC framework provides Model-View-Controller (MVC) architecture');
-insert into `t_ebook` (id, name, description) values (5, 'Mysql', 'MySQL is an open-source relational database management system (RDBMS)');
-insert into `t_ebook` (id, name, description) values (6, 'Java Core', 'Java is at the heart of our digital lifestyle.');
-insert into `t_ebook` (id, name, description) values (7, 'Mybatis', 'MyBatis is a first class persistence framework with support for custom SQL, stored procedures and advanced mappings.');
-insert into `t_ebook` (id, name, description) values (8, 'Javascript', 'JavaScript is the programming language of the Web');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values(1, 'spring boot', 200, 202,'Spring Boot makes it easy to create stand-alone that you can "just run".');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values(2, 'Vue', 100, 101, 'The Progressive JavaScript Framework');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values (3, 'Spring', 200, 202, 'The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values (4, 'SpringMVC', 200, 202, 'The Spring Web MVC framework provides Model-View-Controller (MVC) architecture');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values (5, 'Mysql', 400, 401, 'MySQL is an open-source relational database management system (RDBMS)');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values (6, 'Java Core', 200, 201, 'Java is at the heart of our digital lifestyle.');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values (7, 'Mybatis', 200, 202, 'MyBatis is a first class persistence framework with support for custom SQL, stored procedures and advanced mappings.');
+insert into `t_ebook` (id, name, `category1_id`, `category2_id`, description) values (8, 'Javascript', 100, 102, 'JavaScript is the programming language of the Web');
+
 
 # category schema
 drop table if exists `t_category`;
@@ -66,6 +67,11 @@ insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) v
 insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (4, 1, 3, 'Sect. 2.1', 1, 0, 0);
 insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (5, 1, 3, 'Sect. 2.2', 2, 0, 0);
 insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, 'Sect. 2.1.1', 1, 0, 0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (7,6,0,'Ch. 1 Basic Concept',0,2,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (8,6,7,'Sect. 1.1 OOP',1,2,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (9, 6,7,'Sect. 1.2 Keywords',2,1,0);
+insert into `t_doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (10, 6,7,'Sect 1.3 Thread',3,1,0);
+
 
 -- content schema
 drop table if exists `t_content`;

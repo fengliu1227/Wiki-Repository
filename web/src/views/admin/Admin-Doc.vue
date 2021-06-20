@@ -171,6 +171,7 @@
 
 
             if(Tool.isEmpty(level1.value)){
+              treeSelectData.value=[];
               treeSelectData.value.unshift({id:0, name:'None'});
             }else{
               treeSelectData.value = Tool.copy(level1.value);
@@ -313,10 +314,18 @@
         doc.value = Tool.copy(record);
         handleQueryContent();
 
-        treeSelectData.value = Tool.copy(level1.value);
-        setDisable(treeSelectData.value, record.id);
-
-        treeSelectData.value.unshift({id: 0, name: 'None'});
+        // treeSelectData.value = Tool.copy(level1.value);
+        // setDisable(treeSelectData.value, record.id);
+        //
+        // treeSelectData.value.unshift({id: 0, name: 'None'});
+        if(Tool.isEmpty(level1.value)){
+          treeSelectData.value = [];
+          treeSelectData.value.unshift({id: 0, name: 'None'});
+        }else{
+          treeSelectData.value = Tool.copy(level1.value);
+          setDisable(treeSelectData.value, record.id);
+          treeSelectData.value.unshift({id:0, name:'None'});
+        }
       };
 
       /**
@@ -328,9 +337,14 @@
           ebookId : route.query.ebookId
         };
 
-        treeSelectData.value = Tool.copy(level1.value);
 
-        treeSelectData.value.unshift({id: 0, name: '无'});
+        if(Tool.isEmpty(level1.value)){
+          treeSelectData.value = [];
+          treeSelectData.value.unshift({id: 0, name: 'None'});
+        }else{
+          treeSelectData.value = Tool.copy(level1.value);
+          treeSelectData.value.unshift({id:0, name:'None'});
+        }
       };
 
 
