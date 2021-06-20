@@ -7,7 +7,10 @@ redis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 Ant Design Vue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=>  make it easy for the style of the page<br>
 Vue 3.0, Vue Cli&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=>  develop the frontend<br>
 RocketMQ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=>  Decouple the spring boot aplication and the message function<br>
-spring, Spring boot&nbsp;=>  never felt so easy to develop a web application before<br>
+spring, Spring boot&nbsp;=>  never felt so easy to develop a web application before<br><br/>
+
+Unify request and response classes and formats to facilitate the scanning of receiving data and using data, it also make it easier to vaildify the data passed in backend.<br/>
+Designed reuseable components for front-end.<br/> 
 
 ## Technology Stack
 
@@ -53,6 +56,8 @@ PassWord: admin<br/>
 
 # Database ER
 ![image](https://github.com/fengliu1227/Wiki-Repository/blob/master/image-readme/databaseER.png)
+
+
 
 # Page Layout
 
