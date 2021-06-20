@@ -97,19 +97,14 @@
   >
     <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="update role">
-        <a-input v-model:value="user.role"/>
-        {{user.role}}
-      </a-form-item>
-      <a-form-item label="update role">
         <a-select
                 v-model:value="user.role"
                 ref="select"
         >
-          <a-select-option :value="0">
-            None
-          </a-select-option>
-          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
-            {{c.name}}
+
+          {{user.role}}
+          <a-select-option v-for="c in roleList" :key="c.role" :value="c.role" :disabled="c.role === user.role">
+            {{c.role}}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -151,6 +146,10 @@
         {
           title: 'Password',
           dataIndex: 'password'
+        },
+        {
+          title: 'Role',
+          dataIndex: 'role'
         },
         {
           title: 'Action',
@@ -235,12 +234,30 @@
         }
       };
       const roleModalVisible = ref(false);
+      const roleModalLoading = ref(false);
+      const handleRoleModalOk=() =>{
+        roleModalLoading.value = true;
+        axios.put("/user/role", user.value).then((response) => {
+          roleModalLoading.value = false;
+          const data = response.data;
+          if (data.success) {
+            roleModalVisible.value = false;
+
+            handleQuery({
+              page: pagination.value.current,
+              size: pagination.value.pageSize,
+            });
+          } else {
+            message.error(data.message);
+          }
+        });
+      }
+
       /**
        * Set Role
        */
       const setRole = (record: any) => {
         roleModalVisible.value = true;
-        console.log("====", record);
         user.value = Tool.copy(record);
       };
 
@@ -305,12 +322,25 @@
         user.value = Tool.copy(record);
         user.value.password = null;
       };
+      const roleList = ref();
+      const getAllRole = () =>{
+        axios.get("/role").then((response) => {
+          const data = response.data; // data = commonResp
+          if(data.success){
+            roleList.value = data.content;
+            console.log("===========", roleList.value);
+          }else{
+            message.error(data.message);
+          }
+        });
+      };
 
       onMounted(() => {
         handleQuery({
           page: 1,
           size: pagination.value.pageSize,
         });
+        getAllRole();
       });
 
       return {
@@ -337,7 +367,10 @@
         handleResetModalOk,
         resetPassword,
         setRole,
-        roleModalVisible
+        roleModalVisible,
+        roleList,
+        roleModalLoading,
+        handleRoleModalOk,
       }
     }
   });
