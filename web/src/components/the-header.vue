@@ -90,6 +90,7 @@
     import { message } from 'ant-design-vue';
     import store from "@/store";
     import { Tool } from '@/util/tool';
+    import router from "@/router";
 
 
     const hexMd5 = require('js-md5');
@@ -169,6 +170,7 @@
                     if (data.success) {
                         message.success("Log out successfully！！");
                         store.commit("setUser", {});
+                        router.push('/');
                     } else {
                         message.error(data.message);
                     }
