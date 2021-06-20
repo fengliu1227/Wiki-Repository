@@ -23,8 +23,9 @@ redis(store token), RocketMQ(send message for all user)<br/>
 ## how to use:
 1. Configure database information in src/main/source/application.properties.<br/>
 2. Configure the websocket and backend url in web/.env.dev or web/.env.prod/<br/>
-3. go to the web folder and $npm install.<br/>
-4. if you want to use RocketMQ, download it, The thing you need to notice:<br/>
+3. Make sure you created Schema named wiki.<br/>
+4. go to the web folder and $npm install.<br/>
+5. if you want to use RocketMQ, download it, The thing you need to notice:<br/>
 ````bash
 nohup sh bin/mqnamesrv & //start server
 nohup sh bin/mqbroker -n localhost:9876 autoCreateTopicEnable=true & // start broker(don't use the commend in the offical website if you want to auto create topic)
@@ -41,6 +42,10 @@ sh bin/mqshutdown namesrv // stop server
     vue-cli-service serve --mode dev // run in dev environment
     vue-cli-service serve --mode prod // run in production environment
 ````
+
+# Database ER
+![image](https://github.com/fengliu1227/Wiki-Repository/blob/master/image-readme/databaseER.png)
+
 # Page Layout
 
 ## user home page
