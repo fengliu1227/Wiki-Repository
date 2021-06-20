@@ -43,6 +43,14 @@ sh bin/mqshutdown namesrv // stop server
     vue-cli-service serve --mode prod // run in production environment
 ````
 
+## user information:
+### Role: User
+Login name: user1<br/>
+PassWord: user<br/>
+### Role: Admin
+Login name: admin1<br/>
+PassWord: admin<br/>
+
 # Database ER
 ![image](https://github.com/fengliu1227/Wiki-Repository/blob/master/image-readme/databaseER.png)
 
