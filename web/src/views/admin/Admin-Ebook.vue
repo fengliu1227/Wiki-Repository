@@ -30,7 +30,7 @@
               @change="handleTableChange"
       >
         <template #cover="{ text: cover }">
-          <img v-if="cover" :src="cover" alt="avatar" />
+          <a-avatar :src=" cover" shape="square" :size="50"/>
         </template>
 
         <template v-slot:category="{ text, record }">
