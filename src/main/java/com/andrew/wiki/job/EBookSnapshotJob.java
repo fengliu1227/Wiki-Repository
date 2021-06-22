@@ -20,7 +20,7 @@ public class EBookSnapshotJob {
     @Autowired
     private SnowFlake snowFlake;
 
-    /**
+    /**"0 0 0,6,12,18 * * ? "
      * 0, 6, 12, 18 o'clock, six hours per day => update eBookSnapshot
      */
     @Scheduled(cron = "0 0 0,6,12,18 * * ? ")

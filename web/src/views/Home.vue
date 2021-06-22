@@ -7,10 +7,7 @@
               @click="handleClick"
       >
         <a-menu-item key="All">
-          <router-link :to="'/'">
-          <MailOutlined />
           <span>All Ebooks</span>
-          </router-link>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
           <template v-slot:title>
@@ -172,7 +169,6 @@ export default defineComponent({
 
 
     const handleQuery = (params: any) => {
-      console.log("==========================", params);
       axios.get("/ebook/list", {
         params:{
           page: params.page,
@@ -197,6 +193,7 @@ export default defineComponent({
     const handleClick = (value: any) => {
       if (value.key === 'All') {
         isShowWelcome.value = true;
+        handleQuery({page: 1, size: 500});
       } else {
         category2Id = value.key;
         isShowWelcome.value = false;

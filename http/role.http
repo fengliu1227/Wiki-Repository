@@ -1,1 +1,1 @@
-GET http://localhost:8080/role
+GET http://wiki-server.heygarlic.com/role

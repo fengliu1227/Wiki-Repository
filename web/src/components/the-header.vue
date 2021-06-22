@@ -103,8 +103,8 @@
 
             // use for login
             const loginUser = ref({
-                loginName: "user1",
-                password: "user"
+                loginName: "enter your login name here",
+                password: ""
             });
             const RegisterUser = ref();
             RegisterUser.value={};
@@ -166,7 +166,6 @@
             const logout = () => {
                 axios.post('/user/logout/' + user.value.token).then((response) => {
                     const data = response.data;
-                    console.log("=============", data);
                     if (data.success) {
                         message.success("Log out successfully！！");
                         store.commit("setUser", {});
