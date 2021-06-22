@@ -159,6 +159,7 @@
        * data Query
        **/
       const handleQuery = () => {
+        editor.txt.html("");
         loading.value = true;
         level1.value = [];
         axios.get("/doc/all/" + route.query.ebookId).then((response) => {

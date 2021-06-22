@@ -103,7 +103,7 @@
 
             // use for login
             const loginUser = ref({
-                loginName: "enter your login name here",
+                loginName: "",
                 password: ""
             });
             const RegisterUser = ref();
